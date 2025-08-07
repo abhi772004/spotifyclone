@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bajao 🎵</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #0d0d0d;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 230px;
+      background-color: #000;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      border-right: 1px solid #1a1a1a;
+    }
+
+    .sidebar h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ff6ec4, #7873f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientAnimation 4s infinite alternate;
+      font-weight: 700;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .nav-link {
+      font-size: 1em;
+      color: #b3b3b3;
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .hero h2 {
+      font-size: 2.2em;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .hero p {
+      font-size: 1em;
+      color: #bbb;
+      max-width: 500px;
+      margin-top: 10px;
+    }
+
+    .search-bar {
+      margin: 30px 0;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 500px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 25px;
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 1em;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
+    }
+
+    .section-title {
+      font-size: 1.4em;
+      margin: 30px 0 15px;
+      font-weight: 600;
+      color: #ffffffee;
+    }
+
+    .songs-container {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 20px;
+    }
+
+    .song-card {
+      background: linear-gradient(145deg, #1f1f1f, #2c2c2c);
+      border-radius: 15px;
+      padding: 15px;
+      width: 180px;
+      flex-shrink: 0;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 20, 147, 0.1);
+    }
+
+    .song-card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px rgba(255, 20, 147, 0.4);
+    }
+
+    .song-card img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .song-title {
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 1em;
+      color: #fff;
+    }
+
+    .artist-name {
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #777;
+      font-size: 0.85em;
+    }
+
+    .songs-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .songs-container::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 4px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      body {
+        flex-direction: column;
+      }
+      .main {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h1><span class="gradient-text">Bajao 🎵</span></h1>
+    <a href="#" class="nav-link">🏠 Home</a>
+    <a href="#" class="nav-link">🔍 Search</a>
+    <a href="#" class="nav-link">📚 Library</a>
+    <a href="#" class="nav-link">❤️ Favourites</a>
+  </div>
+
+  <div class="main">
+    <div class="hero">
+      <h2>Welcome to Bajao</h2>
+      <p>Feel the beat of Punjab. Stream timeless tracks by your favorite artists.</p>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="🔍 Search Babbu Maan, Miss Pooja, Amrinder Gill...">
+    </div>
+
+    <div class="section-title">🔥 Trending Punjabi Legends</div>
+    <div class="songs-container">
+      <div class="song-card" data-song="/media/song/shk.mp3">
+        <img src="/media//songimg/mns.jpg" alt="Mittran Di Chhatri">
+        <div class="song-title">shonk hatyar</div>
+        <div class="artist-name">Babbu Maan</div>
+      </div>
+      <div class="song-card" data-song="/media/songs/tere_bin.mp3">
+        <img src="/media/songimg/terebin.jpg" alt="Tere Bin">
+        <div class="song-title">Tere Bin</div>
+        <div class="artist-name">Kanth Kaler</div>
+      </div>
+      <div class="song-card" data-song="/media/songs/seeti_maar_ke.mp3">
+        <img src="/media/songimg/seeti.jpg" alt="Seeti Maar Ke">
+        <div class="song-title">Seeti Maar Ke</div>
+        <div class="artist-name">Miss Pooja</div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2025 Bajao. Celebrating the soul of Punjabi music 🎶
+    </footer>
+  </div>
+
+  <audio id="audioPlayer" controls style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; z-index: 100;"></audio>
+
+  <script>
+    const songCards = document.querySelectorAll(".song-card");
+    const audioPlayer = document.getElementById("audioPlayer");
+
+    songCards.forEach(card => {
+      card.addEventListener("click", () => {
+        const songUrl = card.getAttribute("data-song");
+        if (songUrl) {
+          audioPlayer.src = songUrl;
+          audioPlayer.play();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
