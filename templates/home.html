@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Navbar</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #000;
+      color: white;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      height: 32px;
+    }
+
+    .home-icon {
+      background-color: #121212;
+      border-radius: 50%;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: #121212;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #b3b3b3;
+    }
+
+    .search-bar input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      width: 300px;
+      font-size: 14px;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      color: #b3b3b3;
+    }
+
+    .navbar-right .divider {
+      height: 24px;
+      width: 1px;
+      background-color: #b3b3b3;
+    }
+
+    .navbar-right a {
+      text-decoration: none;
+      color: #b3b3b3;
+    }
+
+    .navbar-right .login-btn {
+      background-color: #fff;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="navbar-left">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="Spotify Logo" class="logo" />
+    
+    <div class="home-icon">
+      <img src="https://img.icons8.com/ios-filled/24/ffffff/home.png" alt="Home" />
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="What do you want to play?" />
+      <img src="https://img.icons8.com/ios-filled/20/cccccc/box.png" alt="Search Icon" />
+    </div>
+  </div>
+
+  <div class="navbar-right">
+    <a href="#">Premium</a>
+    <a href="#">Support</a>
+    <a href="#">Download</a>
+    <div class="divider"></div>
+    <a href="#">Install App</a>
+    <a href="#">Sign up</a>
+    <a href="#" class="login-btn">Log in</a>
+  </div>
+</div>
+
+</body>
+</html>
