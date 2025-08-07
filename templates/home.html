@@ -5,12 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bajao 🎵</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
 
     body {
@@ -18,6 +15,7 @@
       background-color: #0d0d0d;
       color: #fff;
       display: flex;
+      flex-direction: column;
       min-height: 100vh;
     }
 
@@ -29,6 +27,10 @@
       flex-direction: column;
       gap: 20px;
       border-right: 1px solid #1a1a1a;
+      position: fixed;
+      height: 100vh;
+      top: 0;
+      left: 0;
     }
 
     .sidebar h1 {
@@ -62,33 +64,21 @@
     }
 
     .main {
+      margin-left: 230px;
       flex: 1;
       padding: 30px;
-      overflow-x: hidden;
-    }
-
-    .hero {
-      margin-bottom: 40px;
-      animation: fadeIn 2s ease-in-out;
+      padding-bottom: 120px; /* Space for the footer/player */
     }
 
     .hero h2 {
       font-size: 2.2em;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .hero p {
-      font-size: 1em;
-      color: #bbb;
-      max-width: 500px;
-      margin-top: 10px;
+      margin-bottom: 10px;
     }
 
     .search-bar {
-      margin: 30px 0;
+      margin: 20px 0;
     }
-
+    
     .search-bar input {
       width: 100%;
       max-width: 500px;
@@ -99,14 +89,13 @@
       color: #fff;
       font-size: 1em;
       outline: none;
-      box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
     }
 
     .section-title {
-      font-size: 1.4em;
-      margin: 30px 0 15px;
+      font-size: 1.5em;
       font-weight: 600;
-      color: #ffffffee;
+      margin-top: 40px;
+      margin-bottom: 20px;
     }
 
     .songs-container {
@@ -114,6 +103,23 @@
       gap: 20px;
       overflow-x: auto;
       padding-bottom: 20px;
+      /* Style scrollbar for better look */
+      scrollbar-width: thin;
+      scrollbar-color: #ff6ec4 #1f1f1f;
+    }
+
+    .songs-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .songs-container::-webkit-scrollbar-track {
+      background: #1f1f1f;
+      border-radius: 10px;
+    }
+
+    .songs-container::-webkit-scrollbar-thumb {
+      background-color: #ff6ec4;
+      border-radius: 10px;
     }
 
     .song-card {
@@ -122,69 +128,187 @@
       padding: 15px;
       width: 180px;
       flex-shrink: 0;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(255, 20, 147, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .song-card:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 25px rgba(255, 20, 147, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
     }
 
     .song-card img {
       width: 100%;
       border-radius: 12px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     }
 
     .song-title {
       margin-top: 10px;
       font-weight: 600;
       font-size: 1em;
-      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .artist-name {
       font-size: 0.9em;
       color: #aaa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    footer {
-      margin-top: 50px;
+    .custom-player {
+      position: fixed;
+      bottom: 0;
+      left: 230px;
+      right: 0;
+      background-color: #1a1a1a;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      z-index: 999;
+      border-top: 1px solid #333;
+    }
+
+    .player-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .player-left img {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+    }
+
+    .song-info .title {
+      font-size: 1.1em;
+      font-weight: 500;
+    }
+
+    .song-info .artist {
+      font-size: 0.9em;
+      color: #16bd32;
+    }
+
+    .player-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      flex: 2;
+      
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .play-btn {
+      font-size: 24px;
+      background: linear-gradient(45deg, #0741b6, #0c0c0d);
+      border: none;
+      padding: 12px;
+      border-radius: 50%;
+      color: #0e0a0a;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(205, 8, 126, 0.5);
+    }
+
+    .player-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .volume-slider-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100px;
+    }
+
+    /* Redesigning the progress slider */
+    .progress-slider-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-slider-container span {
+      font-size: 0.8em;
+      color: #b3b3b3;
+      min-width: 35px;
       text-align: center;
-      color: #777;
-      font-size: 0.85em;
     }
 
-    .songs-container::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .songs-container::-webkit-scrollbar-thumb {
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
       background: #444;
-      border-radius: 4px;
+      border-radius: 5px;
+      outline: none;
+      transition: background 0.3s;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: #0cd21d;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    input[type="range"]:hover::-webkit-slider-thumb {
+      background: #3934bc;
     }
 
     @media (max-width: 768px) {
       .sidebar {
         display: none;
       }
-      body {
-        flex-direction: column;
-      }
       .main {
+        margin-left: 0;
         padding: 20px;
+        padding-bottom: 120px;
+      }
+      .custom-player {
+        left: 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 20px 20px;
+      }
+      .player-left, .player-right {
+        width: 100%;
+      }
+      .player-center {
+        flex: auto;
+      }
+      .player-right {
+        justify-content: center;
       }
     }
   </style>
@@ -210,42 +334,172 @@
 
     <div class="section-title">🔥 Trending Punjabi Legends</div>
     <div class="songs-container">
-      <div class="song-card" data-song="/media/song/shk.mp3">
-        <img src="/media//songimg/mns.jpg" alt="Mittran Di Chhatri">
-        <div class="song-title">shonk hatyar</div>
+      <div class="song-card" data-song="/media/song/shk.mp3" data-title="Shonk Hatyaar" data-artist="Babbu Maan" data-img="/media/songimg/mns.jpg">
+        <img src="/media/songimg/mns.jpg" alt="Shonk Hatyaar">
+        <div class="song-title">Shonk Hatyaar</div>
         <div class="artist-name">Babbu Maan</div>
       </div>
-      <div class="song-card" data-song="/media/songs/tere_bin.mp3">
+      <div class="song-card" data-song="/media/songs/tere_bin.mp3" data-title="Tere Bin" data-artist="Kanth Kaler" data-img="/media/songimg/terebin.jpg">
         <img src="/media/songimg/terebin.jpg" alt="Tere Bin">
         <div class="song-title">Tere Bin</div>
         <div class="artist-name">Kanth Kaler</div>
       </div>
-      <div class="song-card" data-song="/media/songs/seeti_maar_ke.mp3">
+      <div class="song-card" data-song="/media/song/seeti.mp3" data-title="Seeti Maar Ke" data-artist="Miss Pooja" data-img="/media/songimg/seeti.jpg">
         <img src="/media/songimg/seeti.jpg" alt="Seeti Maar Ke">
         <div class="song-title">Seeti Maar Ke</div>
         <div class="artist-name">Miss Pooja</div>
       </div>
     </div>
-
-    <footer>
-      &copy; 2025 Bajao. Celebrating the soul of Punjabi music 🎶
-    </footer>
   </div>
 
-  <audio id="audioPlayer" controls style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; z-index: 100;"></audio>
+  <div class="custom-player">
+    <div class="player-left">
+      <img id="player-art" src="" alt="Album Art">
+      <div class="song-info">
+        <div class="title" id="current-title">No song playing</div>
+        <div class="artist" id="current-artist"></div>
+      </div>
+    </div>
+
+    <div class="player-center">
+      <div class="controls">
+        <button id="prevBtn">⏮️</button>
+        <button class="play-btn" id="playPauseBtn">▶️</button>
+        <button id="nextBtn">⏭️</button>
+      </div>
+      <div class="progress-slider-container">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressSlider" value="0" min="0" max="100">
+        <span id="durationTime">0:00</span>
+      </div>
+    </div>
+
+    <div class="player-right">
+        <div class="volume-slider-container">
+            <span id="volumeIcon">🔉</span>
+            <input type="range" id="volumeSlider" min="0" max="100" value="100">
+        </div>
+    </div>
+  </div>
+
+  <audio id="audioPlayer"></audio>
 
   <script>
     const songCards = document.querySelectorAll(".song-card");
     const audioPlayer = document.getElementById("audioPlayer");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const progressSlider = document.getElementById("progressSlider");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const currentTitle = document.getElementById("current-title");
+    const currentArtist = document.getElementById("current-artist");
+    const playerArt = document.getElementById("player-art");
+    const currentTimeEl = document.getElementById("currentTime");
+    const durationTimeEl = document.getElementById("durationTime");
+    const volumeIcon = document.getElementById("volumeIcon");
+    
+    let isPlaying = false;
+    let currentSongIndex = -1; // To keep track of the current song
 
-    songCards.forEach(card => {
-      card.addEventListener("click", () => {
-        const songUrl = card.getAttribute("data-song");
-        if (songUrl) {
-          audioPlayer.src = songUrl;
-          audioPlayer.play();
+    const songs = Array.from(songCards).map(card => ({
+        url: card.getAttribute("data-song"),
+        title: card.getAttribute("data-title"),
+        artist: card.getAttribute("data-artist"),
+        img: card.getAttribute("data-img")
+    }));
+
+    // Function to format time from seconds to MM:SS
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+
+    function loadSong(index) {
+        if (index >= 0 && index < songs.length) {
+            currentSongIndex = index;
+            const song = songs[currentSongIndex];
+            audioPlayer.src = song.url;
+            currentTitle.textContent = song.title;
+            currentArtist.textContent = song.artist;
+            playerArt.src = song.img;
+            playSong();
         }
-      });
+    }
+
+    function playSong() {
+        audioPlayer.play();
+        isPlaying = true;
+        playPauseBtn.textContent = "⏸️";
+    }
+
+    function pauseSong() {
+        audioPlayer.pause();
+        isPlaying = false;
+        playPauseBtn.textContent = "▶️";
+    }
+
+    function prevSong() {
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        loadSong(currentSongIndex);
+    }
+
+    function nextSong() {
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        loadSong(currentSongIndex);
+    }
+    
+    // Initial setup: Hide player art until a song is loaded
+    playerArt.style.display = 'none';
+
+    songCards.forEach((card, index) => {
+        card.addEventListener("click", () => {
+            loadSong(index);
+        });
+    });
+
+    playPauseBtn.addEventListener("click", () => {
+        if (audioPlayer.src) { // Check if a song is loaded
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        }
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", prevSong);
+    document.getElementById("nextBtn").addEventListener("click", nextSong);
+
+    audioPlayer.addEventListener("loadedmetadata", () => {
+        durationTimeEl.textContent = formatTime(audioPlayer.duration);
+        progressSlider.value = 0;
+        playerArt.style.display = 'block';
+    });
+
+    audioPlayer.addEventListener("timeupdate", () => {
+        const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressSlider.value = percentage || 0;
+        currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+    });
+
+    audioPlayer.addEventListener("ended", () => {
+        nextSong();
+    });
+
+    progressSlider.addEventListener("input", () => {
+        const newTime = (progressSlider.value / 100) * audioPlayer.duration;
+        audioPlayer.currentTime = newTime;
+    });
+
+    volumeSlider.addEventListener("input", () => {
+        audioPlayer.volume = volumeSlider.value / 100;
+        if (volumeSlider.value == 0) {
+            volumeIcon.textContent = "🔇";
+        } else if (volumeSlider.value < 50) {
+            volumeIcon.textContent = "🔉";
+        } else {
+            volumeIcon.textContent = "🔊";
+        }
     });
   </script>
 </body>
