@@ -1,1482 +1,312 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Bajao 🎵</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for modern icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* General styles */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0d0d0d;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden; /* Prevent horizontal scroll on body */
-        }
-
-        /* Sidebar styles */
-        .sidebar {
-            width: 230px;
-            background-color: #000;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            border-right: 1px solid #1a1a1a;
-            position: fixed;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .sidebar h1 {
-            font-size: 2em;
-            margin-bottom: 30px;
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, #ff6ec4, #7873f5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientAnimation 4s infinite alternate;
-            font-weight: 700;
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-
-        .nav-link {
-            font-size: 1em;
-            color: #b3b3b3;
-            text-decoration: none;
-            margin-bottom: 12px;
-            transition: color 0.3s;
-        }
-
-        .nav-link:hover {
-            color: #fff;
-        }
-
-        /* NEW: Sidebar sections for Library, Playlists, Podcasts */
-        .sidebar-section {
-            background-color: #1a1a1a;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .sidebar-section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 1.1em;
-        }
-
-        .sidebar-section-header .icon-btn {
-            background: none;
-            border: none;
-            color: #b3b3b3;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        .sidebar-section-header .icon-btn:hover {
-            color: #fff;
-        }
-
-        .sidebar-section p {
-            font-size: 0.9em;
-            color: #b3b3b3;
-            margin-bottom: 15px;
-        }
-
-        .sidebar-btn {
-            background-color: #2a2a2a;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.3s;
-        }
-        .sidebar-btn:hover {
-            background-color: #3a3a3a;
-        }
-
-        /* Main content area */
-        .main {
-            margin-left: 230px;
-            flex: 1;
-            padding: 30px;
-            padding-bottom: 120px; /* Space for the footer/player */
-        }
-
-        .hero h2 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-        }
-
-        .search-bar {
-            margin: 20px 0;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            max-width: 500px;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 25px;
-            background: #2a2a2a;
-            color: #fff;
-            font-size: 1em;
-            outline: none;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 1.5em;
-            font-weight: 600;
-        }
-
-        .show-all-link {
-            color: #b3b3b3;
-            text-decoration: none;
-            font-size: 0.9em;
-            transition: color 0.3s;
-        }
-        .show-all-link:hover {
-            color: #fff;
-            text-decoration: underline;
-        }
-
-        .songs-container {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            flex-wrap: nowrap; 
-            scrollbar-width: thin;
-            scrollbar-color: #ff6ec4 #1f1f1f;
-        }
-
-        .songs-container::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .songs-container::-webkit-scrollbar-track {
-            background: #1f1f1f;
-            border-radius: 10px;
-        }
-
-        .songs-container::-webkit-scrollbar-thumb {
-            background-color: #ff6ec4;
-            border-radius: 10px;
-        }
-
-        .song-card {
-            background: linear-gradient(145deg, #1f1f1f, #2c2c2c);
-            border-radius: 15px;
-            padding: 15px;
-            width: 180px;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .song-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .song-card img {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .song-title {
-            margin-top: 10px;
-            font-weight: 600;
-            font-size: 1em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .artist-name {
-            font-size: 0.9em;
-            color: #aaa;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Popular Artists Section CSS */
-        .popular-artists-container {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            flex-wrap: nowrap;
-            scrollbar-width: thin;
-            scrollbar-color: #7873f5 #1f1f1f;
-        }
-        .popular-artists-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        .popular-artists-container::-webkit-scrollbar-track {
-            background: #1f1f1f;
-            border-radius: 10px;
-        }
-        .popular-artists-container::-webkit-scrollbar-thumb {
-            background-color: #7873f5;
-            border-radius: 10px;
-        }
-
-        .artist-card {
-            background: linear-gradient(145deg, #1f1f1f, #2c2c2c);
-            border-radius: 15px;
-            padding: 15px;
-            width: 180px;
-            flex-shrink: 0;
-            cursor: pointer;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .artist-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .artist-card img {
-            width: 100%;
-            border-radius: 50%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            margin-bottom: 10px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .artist-name-card {
-            font-weight: 600;
-            font-size: 1em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .artist-type {
-            font-size: 0.8em;
-            color: #aaa;
-        }
-
-        /* === Artist View Specific Styles === */
-        .artist-view-container {
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .artist-header-section {
-            display: flex;
-            align-items: flex-end; /* Align image and text at the bottom */
-            gap: 30px;
-            padding: 40px 0;
-            background: linear-gradient(180deg, rgba(120, 115, 245, 0.3), rgba(0,0,0,0)); /* Subtle gradient from purple */
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .artist-header-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            margin-left: 30px;
-            flex-shrink: 0;
-        }
-
-        .artist-header-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end; /* Align text to the bottom */
-            flex-grow: 1;
-            padding-bottom: 10px; /* Small padding from bottom of image */
-        }
-
-        .verified-badge {
-            font-size: 0.8em;
-            color: #3d91f4; /* Spotify blue */
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .artist-header-name {
-            font-size: 4em; /* Large artist name */
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-
-        .monthly-listeners {
-            font-size: 1em;
-            color: #b3b3b3;
-            margin-bottom: 20px;
-        }
-
-        .artist-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .artist-play-button {
-            background: linear-gradient(45deg, #1db954, #1ed760); /* Spotify green */
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2em;
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .artist-play-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(29, 185, 84, 0.6);
-        }
-
-        .artist-follow-button {
-            background: none;
-            border: 1px solid #b3b3b3;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s;
-        }
-        .artist-follow-button:hover {
-            border-color: #fff;
-            transform: scale(1.02);
-        }
-
-        .artist-options-button {
-            background: none;
-            border: none;
-            color: #b3b3b3;
-            font-size: 2em;
-            cursor: pointer;
-        }
-
-        .artist-songs-list .song-list-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 10px 0;
-            border-bottom: 1px solid #1a1a1a;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .artist-songs-list .song-list-item:hover {
-            background-color: #1a1a1a;
-            border-radius: 8px;
-        }
-        .artist-songs-list .song-list-item:last-child {
-            border-bottom: none;
-        }
-
-        .song-list-item .index {
-            width: 30px;
-            text-align: center;
-            color: #b3b3b3;
-            font-size: 0.9em;
-        }
-        .song-list-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-        .song-list-item .song-info {
-            flex-grow: 1;
-        }
-        .song-list-item .song-info .title {
-            font-weight: 500;
-        }
-        .song-list-item .song-info .artist {
-            color: #b3b3b3;
-            font-size: 0.9em;
-        }
-        .song-list-item .duration {
-            color: #b3b3b3;
-            font-size: 0.9em;
-            width: 50px;
-            text-align: right;
-        }
-
-        /* Back button for artist view */
-        .back-button {
-            background: none;
-            border: none;
-            color: #b3b3b3;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: color 0.3s;
-        }
-        .back-button:hover {
-            color: #fff;
-        }
-
-
-        /* === Player Styles === */
-        .custom-player {
-            position: fixed;
-            bottom: 0;
-            left: 230px;
-            right: 0;
-            background-color: #1a1a1a;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            z-index: 999;
-            border-top: 1px solid #333;
-        }
-
-        .player-left, .player-center, .player-right {
-            display: flex;
-            align-items: center;
-        }
-
-        .player-left {
-            gap: 15px;
-            flex: 1;
-        }
-
-        .player-left img {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-        }
-
-        .song-info .title {
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
-        .song-info .artist {
-            font-size: 0.9em;
-            color: #16bd32;
-        }
-
-        .player-center {
-            flex: 2;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .controls, .player-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        /* Button Styles */
-        .control-btn {
-            background: rgba(255, 255, 255, 0.05); /* Subtle background for definition */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Light border */
-            color: #b3b3b3;
-            font-size: 1.4em;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out; /* Smooth transitions for all properties */
-            padding: 8px;
-            border-radius: 50%;
-            display: flex; /* For centering icons */
-            align-items: center;
-            justify-content: center;
-            width: 40px; /* Fixed width and height for perfect circle */
-            height: 40px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-        }
-
-        .control-btn:hover {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.15); /* Brighter background on hover */
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Enhanced shadow on hover */
-        }
-        
-        .play-btn {
-            font-size: 2.2em;
-            color: #fff; /* White icon for contrast */
-            /* Using the Bajao heading gradient */
-            background: linear-gradient(45deg, #ff6ec4, #7873f5); 
-            border: none; /* Remove border for play button */
-            border-radius: 50%;
-            padding: 12px;
-            width: 60px; /* Larger play button */
-            height: 60px;
-            /* Shadow matching new gradient */
-            box-shadow: 0 6px 20px rgba(255, 110, 196, 0.5); 
-            transition: all 0.2s ease-in-out;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.05);
-            /* Stronger shadow on hover */
-            box-shadow: 0 8px 25px rgba(255, 110, 196, 0.7);
-        }
-
-        /* Active state for shuffle/repeat */
-        .control-btn.active {
-            color: #ff6ec4; /* Highlight active state with gradient color */
-            background-color: rgba(255, 110, 196, 0.2); /* Subtle pink background */
-            border-color: #ff6ec4; /* Pink border */
-            box-shadow: 0 0 10px rgba(255, 110, 196, 0.7); /* Glowing pink shadow */
-        }
-
-        .player-right {
-            flex: 1;
-            justify-content: flex-end;
-        }
-
-        .progress-slider-container {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .progress-slider-container span {
-            font-size: 0.8em;
-            color: #b3b3b3;
-            min-width: 35px;
-            text-align: center;
-        }
-
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 6px;
-            background: #444;
-            border-radius: 5px;
-            outline: none;
-            transition: background 0.3s;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            /* Slider thumb color to match Bajao heading */
-            background: #ff6ec4; /* Pink from gradient */
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        input[type="range"]:hover::-webkit-slider-thumb {
-            /* Hover color for slider thumb */
-            background: #7873f5; /* Purple from gradient */
-        }
-
-        .volume-slider-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100px;
-        }
-
-        /* Message box for temporary feedback */
-        .message-box {
-            position: fixed;
-            bottom: 150px; /* Above the player */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            z-index: 1000;
-            font-size: 0.9em;
-            white-space: nowrap; /* Prevent text wrapping */
-        }
-        .message-box.show {
-            opacity: 1;
-        }
-
-        /* === FULLSCREEN PLAYER STYLES === */
-        .fullscreen-player-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000; /* Solid black background */
-            z-index: 1000; /* Above everything else */
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            transition: opacity 0.3s ease-in-out;
-            opacity: 0; /* Start hidden for transition */
-        }
-
-        .fullscreen-player-overlay.active {
-            display: flex; /* Show when active */
-            opacity: 1; /* Fade in */
-        }
-
-        .fullscreen-header {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end; /* Minimize button to the right */
-            padding: 10px;
-        }
-
-        .minimize-btn {
-            font-size: 1.8em; /* Larger minimize icon */
-            color: #b3b3b3;
-        }
-
-        .fullscreen-content {
-            flex-grow: 1; /* Takes available space */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            /* Maximized image size within available space */
-            max-width: 90vh; /* Adjusted for better fit on various screens */
-            max-height: calc(100vh - 200px); /* More aggressive calc to allow larger image */
-            margin-bottom: 20px; /* Space above controls */
-        }
-
-        .fullscreen-album-art {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain; /* Ensure image fits without cropping */
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        }
-
-        .fullscreen-controls-container {
-            width: 100%;
-            background-color: #1a1a1a; /* Same as normal player background */
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            border-radius: 10px; /* Rounded corners for the player bar */
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5); /* Shadow above it */
-        }
-
-        /* Specific adjustments for controls within fullscreen */
-        .fullscreen-player-center {
-            flex: 2; /* Take more space */
-        }
-
-        .fullscreen-player-right {
-            flex: 1;
-            justify-content: flex-end;
-        }
-
-        /* Hide main player when fullscreen is active */
-        body.fullscreen-active .custom-player {
-            display: none;
-        }
-
-        /* Adjust main content padding when fullscreen is active to avoid scroll issues */
-        body.fullscreen-active .main {
-            padding-bottom: 20px; /* Less padding needed when player is hidden */
-        }
-
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main {
-                margin-left: 0;
-                padding: 20px;
-                padding-bottom: 120px;
-            }
-            .custom-player {
-                left: 0;
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-                padding: 10px 20px 20px;
-            }
-            .player-left, .player-right {
-                width: 100%;
-            }
-            .player-center {
-                flex: auto;
-            }
-            .player-right {
-                justify-content: center;
-            }
-            .message-box {
-                bottom: 100px; /* Adjust for smaller screens */
-            }
-
-            /* Fullscreen player responsive adjustments */
-            .fullscreen-player-overlay {
-                padding: 10px;
-            }
-            .fullscreen-header {
-                padding: 5px;
-            }
-            .fullscreen-album-art {
-                margin-bottom: 10px;
-            }
-            .fullscreen-controls-container {
-                flex-direction: column;
-                padding: 10px 15px;
-                gap: 10px;
-                border-radius: 0; /* Remove border radius on mobile fullscreen for edge-to-edge look */
-            }
-            .fullscreen-player-center, .fullscreen-player-right {
-                width: 100%;
-                justify-content: center;
-            }
-            .controls {
-                flex-wrap: wrap; /* Allow controls to wrap on small screens */
-                justify-content: center;
-                gap: 10px;
-            }
-            .volume-slider-container {
-                width: 150px; /* Make volume slider a bit wider on mobile */
-            }
-        }
-    </style>
-</head>
+{% include 'header.html' %}
 <body>
-    <div class="sidebar">
-        <h1><span class="gradient-text">Bajao 🎵</span></h1>
-        <a href="#" class="nav-link">🏠 Home</a>
-        <a href="#" class="nav-link">🔍 Search</a>
-        <a href="#" class="nav-link">📚 Library</a>
-        <a href="#" class="nav-link">❤️ Favourites</a>
+  <div class="sidebar">
+    <h1><span class="gradient-text">Bajao 🎵</span></h1>
+    <a href="{% url 'spotify:home' %}" class="nav-link">🏠 Home</a>
+    <a href="#" class="nav-link">🔍 Search</a>
+    <a href="#" class="nav-link">📚 Library</a>
+    <a href="#" class="nav-link">❤️ Favourites</a>
 
-        <!-- NEW: Create your first playlist section -->
-        <div class="sidebar-section">
-            <div class="sidebar-section-header">
-                Your Library <button class="icon-btn"><i class="fas fa-plus"></i></button>
-            </div>
-            <p>Create your first playlist</p>
-            <p>It's easy, we'll help you</p>
-            <button class="sidebar-btn">Create playlist</button>
-        </div>
-
-        <!-- NEW: Footer links in sidebar (optional, based on image) -->
-        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #1a1a1a;">
-            <a href="#" class="nav-link" style="font-size: 0.8em;">Legal</a>
-            <a href="#" class="nav-link" style="font-size: 0.8em;">Safety & Privacy Center</a>
-            <a href="#" class="nav-link" style="font-size: 0.8em;">Privacy Policy</a>
-            <a href="#" class="nav-link" style="font-size: 0.8em;">Cookies</a>
-            <a href="#" class="nav-link" style="font-size: 0.8em;">About Ads</a>
-            <a href="#" class="nav-link" style="font-size: 0.8em;">Accessibility</a>
-            <a href="#" class="nav-link" style="font-size: 0.8em;">Cookies</a>
-            <button class="sidebar-btn" style="margin-top: 15px; width: 100px; background-color: #333; color: #fff;"><i class="fas fa-globe"></i> English</button>
-        </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-header">
+        Your Library
+        <button class="icon-btn" title="Add to library">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <p>Create your first playlist</p>
+      <p>It's easy, we'll help you</p>
+      <button class="sidebar-btn">Create playlist</button>
     </div>
 
-    <div class="main">
-        <!-- Main content view (visible by default) -->
-        <div id="mainContentView">
-            <div class="hero">
-                <h2>Welcome to Bajao</h2>
-                <p>Feel the beat of Punjab. Stream timeless tracks by your favorite artists:</p>
-            </div>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-link sidebar-footer-link">Legal</a>
+      <a href="#" class="nav-link sidebar-footer-link"
+        >Safety & Privacy Center</a
+      >
+      <a href="#" class="nav-link sidebar-footer-link">Privacy Policy</a>
+      <a href="#" class="nav-link sidebar-footer-link">Cookies</a>
+      <a href="#" class="nav-link sidebar-footer-link">About Ads</a>
+      <a href="#" class="nav-link sidebar-footer-link">Accessibility</a>
+      <a href="#" class="nav-link sidebar-footer-link">Cookies</a>
+      <button class="sidebar-btn sidebar-footer-btn" title="Change language">
+        <i class="fas fa-globe"></i> English
+      </button>
+    </div>
+  </div>
 
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="🔍 Search songs or artists...">
-            </div>
-
-            <!-- Trending songs section -->
-            <div class="section-header">
-                <div class="section-title">Trending songs</div>
-                <a href="#" class="show-all-link">Show all</a>
-            </div>
-            <div class="songs-container" id="songsContainer">
-                {% for song in songs %}
-                <div class="song-card" 
-                     data-song="{{ song.audio_file.url }}" 
-                     data-title="{{ song.title }}" 
-                     data-artist="{{ song.artist }}" 
-                     data-img="{{ song.album_art.url }}">
-                    <img src="{{ song.album_art.url }}" alt="{{ song.title }}">
-                    <div class="song-title">{{ song.title }}</div>
-                    <div class="artist-name">{{ song.artist }}</div>
-                </div>
-                {% endfor %}
-            </div>
-
-            <!-- Popular artists section -->
-            <div class="section-header">
-                <div class="section-title">Popular artists</div>
-                <a href="#" class="show-all-link">Show all</a>
-            </div>
-            <div class="popular-artists-container" id="popularArtistsContainer">
-                <!-- Artist cards will be dynamically inserted here by JavaScript -->
-            </div>
+  <div class="main">
+    <div id="mainContentView">
+      <!-- artist page detail -->
+      {% if is_detail_page %}
+      <div class="artist-detail-container">
+        <div class="artist-header">
+          <img
+            src="{{ artist.image.url }}"
+            alt="{{ artist.name }}"
+            class="artist-detail-image"
+          />
+          <div class="artist-info">
+            <h1>{{ artist.name }}</h1>
+            {% if artist.verified %}
+            <span class="verified-badge">Verified Artist</span>
+            {% endif %}
+            <a href="{% url 'spotify:home' %}">← Back to all artists</a>
+          </div>
         </div>
 
-        <!-- NEW: Artist View Container (hidden by default) -->
-        <div id="artistViewContainer" class="artist-view-container">
-            <button id="backToHomeBtn" class="back-button"><i class="fas fa-arrow-left"></i> Back to Home</button>
-
-            <div class="artist-header-section">
-                <img id="artistHeaderImage" src="" alt="Artist Image" class="artist-header-image">
-                <div class="artist-header-info">
-                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified Artist</span>
-                    <h1 id="artistHeaderName" class="artist-header-name"></h1>
-                    <p id="monthlyListeners" class="monthly-listeners">0 monthly listeners</p>
-                    <div class="artist-actions">
-                        <button class="artist-play-button"><i class="fas fa-play"></i></button>
-                        <button class="artist-follow-button">Follow</button>
-                        <button class="artist-options-button"><i class="fas fa-ellipsis-h"></i></button>
-                    </div>
-                </div>
+        <div class="artist-songs-list">
+          <h2>Songs by {{ artist.name }}</h2>
+          {% if songs_by_artist %}
+       
+          {% for song in songs_by_artist %}
+          <div class="song-card" data-song="{{ song.audio_file.url }}">
+            <img src="{{ song.album_art.url }}" alt="{{ song.title }}" />
+            <div class="song-details">
+              <h3>{{ song.title }}</h3>
+              <h4>Artist: {{ song.artist.name }}</h4>
             </div>
-
-            <div class="section-header">
-                <div class="section-title">Popular</div>
-            </div>
-            <div class="artist-songs-list" id="artistSongsList">
-                <!-- Songs by the artist will be dynamically inserted here -->
-            </div>
+          </div>
+          {% endfor %} {% else %}
+          <p>No songs found for this artist.</p>
+          {% endif %}
         </div>
+      </div>
 
+      <!-- app start from here -->
+      {% else %}
+      <div class="hero">
+        <h2>Welcome to Bajao</h2>
+        <p>
+          Feel the beat of Punjab. Stream timeless tracks by your favorite
+          artists:
+        </p>
+      </div>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍 Search songs or artists..."
+        />
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Trending songs</div>
+        <a href="#" class="show-all-link">Show all</a>
+      </div>
+      <div class="songs-container" id="songsContainer">
+        {% for song in songs %}
+        <div
+          class="song-card"
+          data-song="{{ song.audio_file.url }}"
+          data-title="{{ song.title }}"
+          data-artist="{{ song.artist.name }}"
+          data-img="{{ song.album_art.url }}"
+        >
+          <img src="{{ song.album_art.url }}" alt="{{ song.title }}" />
+          <div class="song-title">{{ song.title }}</div>
+          <div class="artist-name">{{ song.artist.name }}</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Popular Artists</div>
+        <a href="#" class="show-all-link">Show all</a>
+      </div>
+      <div class="popular-artists-container" id="popularArtistsContainer">
+        {% for artist in artists %}
+        <a
+          href="{% url 'spotify:artist_detail' artist.id %}"
+          class="artist-card-link"
+        >
+          <div
+            class="artist-card"
+            data-artist-id="{{ artist.id }}"
+            data-name="{{ artist.name }}"
+            data-verified="{{ artist.verified }}"
+            data-img="{{ artist.image.url }}"
+          >
+            <img src="{{ artist.image.url }}" alt="{{ artist.name }}" />
+            <div class="artist-name">{{ artist.name }}</div>
+            {% if artist.verified %}
+            <span class="verified-badge"
+              ><i class="fas fa-check-circle"></i> Verified</span
+            >
+            {% endif %}
+          </div>
+        </a>
+        {% empty %}
+        <p>No artists found.</p>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
 
-    <!-- Main Audio Player (visible when not in fullscreen) -->
     <div class="custom-player">
-        <div class="player-left">
-            <img id="player-art" src="" alt="Album Art">
-            <div class="song-info">
-                <div class="title" id="current-title">No song playing</div>
-                <div class="artist" id="current-artist"></div>
-            </div>
+      <div class="player-left">
+        <img id="player-art" src="" alt="Album Art" />
+        <div class="song-info">
+          <div class="title" id="current-title">No song playing</div>
+          <div class="artist" id="current-artist"></div>
         </div>
+      </div>
 
-        <div class="player-center">
-            <div class="controls">
-                <!-- Font Awesome Icons for Shuffle, Previous, Play/Pause, Next, Repeat -->
-                <button id="shuffleBtn" class="control-btn"><i class="fas fa-shuffle"></i></button>
-                <button id="prevBtn" class="control-btn"><i class="fas fa-backward-step"></i></button>
-                <button class="play-btn control-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
-                <button id="nextBtn" class="control-btn"><i class="fas fa-forward-step"></i></button>
-                <button id="repeatBtn" class="control-btn"><i class="fas fa-repeat"></i></button>
-            </div>
-            <div class="progress-slider-container">
-                <span id="currentTime">0:00</span>
-                <input type="range" id="progressSlider" value="0" min="0" max="100">
-                <span id="durationTime">0:00</span>
-            </div>
+      <div class="player-center">
+        <div class="controls">
+          <button id="shuffleBtn" class="control-btn" title="Shuffle">
+            <i class="fas fa-shuffle"></i>
+          </button>
+          <button id="prevBtn" class="control-btn" title="Previous">
+            <i class="fas fa-backward-step"></i>
+          </button>
+          <button
+            class="play-btn control-btn"
+            id="playPauseBtn"
+            title="Play/Pause"
+          >
+            <i class="fas fa-play"></i>
+          </button>
+          <button id="nextBtn" class="control-btn" title="Next">
+            <i class="fas fa-forward-step"></i>
+          </button>
+          <button id="repeatBtn" class="control-btn" title="Repeat">
+            <i class="fas fa-repeat"></i>
+          </button>
         </div>
+        <div class="progress-slider-container">
+          <span id="currentTime">0:00</span>
+          <input
+            type="range"
+            id="progressSlider"
+            value="0"
+            min="0"
+            max="100"
+            title="Song progress"
+          />
+          <span id="durationTime">0:00</span>
+        </div>
+      </div>
 
-        <div class="player-right">
-            <!-- Font Awesome Icons for Lyrics, Queue, Devices, Fullscreen -->
-            <button id="lyricsBtn" class="control-btn"><i class="fas fa-align-left"></i></button>
-            <button id="queueBtn" class="control-btn"><i class="fas fa-list-ul"></i></button>
-            <button id="connectBtn" class="control-btn"><i class="fas fa-volume-up"></i></button>
-            <div class="volume-slider-container">
-                <span id="volumeIcon"><i class="fas fa-volume-high"></i></span>
-                <input type="range" id="volumeSlider" min="0" max="100" value="100">
-            </div>
-            <button id="fullscreenBtn" class="control-btn"><i class="fas fa-expand"></i></button>
+      <div class="player-right">
+        <button id="lyricsBtn" class="control-btn" title="Lyrics">
+          <i class="fas fa-align-left"></i>
+        </button>
+        <button id="queueBtn" class="control-btn" title="Queue">
+          <i class="fas fa-list-ul"></i>
+        </button>
+        <button id="connectBtn" class="control-btn" title="Connect to device">
+          <i class="fas fa-volume-up"></i>
+        </button>
+        <div class="volume-slider-container">
+          <span id="volumeIcon"><i class="fas fa-volume-high"></i></span>
+          <input
+            type="range"
+            id="volumeSlider"
+            min="0"
+            max="100"
+            value="100"
+            title="Volume"
+          />
         </div>
+        <button id="fullscreenBtn" class="control-btn" title="Fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+      </div>
     </div>
 
-    <!-- Fullscreen Audio Player Overlay (hidden by default) -->
     <div id="fullscreenPlayer" class="fullscreen-player-overlay">
-        <div class="fullscreen-header">
-            <button id="minimizeFullscreenBtn" class="control-btn minimize-btn"><i class="fas fa-compress"></i></button>
+      <div class="fullscreen-header">
+        <button
+          id="minimizeFullscreenBtn"
+          class="control-btn minimize-btn"
+          title="Minimize fullscreen"
+        >
+          <i class="fas fa-compress"></i>
+        </button>
+      </div>
+      <div class="fullscreen-content">
+        <img
+          id="fullscreen-player-art"
+          src=""
+          alt="Album Art"
+          class="fullscreen-album-art"
+        />
+      </div>
+      <div class="fullscreen-controls-container">
+        <div class="player-center fullscreen-player-center">
+          <div class="controls">
+            <button
+              id="fullscreenShuffleBtn"
+              class="control-btn"
+              title="Shuffle"
+            >
+              <i class="fas fa-shuffle"></i>
+            </button>
+            <button id="fullscreenPrevBtn" class="control-btn" title="Previous">
+              <i class="fas fa-backward-step"></i>
+            </button>
+            <button
+              class="play-btn control-btn"
+              id="fullscreenPlayPauseBtn"
+              title="Play/Pause"
+            >
+              <i class="fas fa-play"></i>
+            </button>
+            <button id="fullscreenNextBtn" class="control-btn" title="Next">
+              <i class="fas fa-forward-step"></i>
+            </button>
+            <button id="fullscreenRepeatBtn" class="control-btn" title="Repeat">
+              <i class="fas fa-repeat"></i>
+            </button>
+          </div>
+          <div class="progress-slider-container">
+            <span id="fullscreenCurrentTime">0:00</span>
+            <input
+              type="range"
+              id="fullscreenProgressSlider"
+              value="0"
+              min="0"
+              max="100"
+              title="Song progress"
+            />
+            <span id="fullscreenDurationTime">0:00</span>
+          </div>
         </div>
-        <div class="fullscreen-content">
-            <img id="fullscreen-player-art" src="" alt="Album Art" class="fullscreen-album-art">
+        <div class="player-right fullscreen-player-right">
+          <button id="fullscreenLyricsBtn" class="control-btn" title="Lyrics">
+            <i class="fas fa-align-left"></i>
+          </button>
+          <button id="fullscreenQueueBtn" class="control-btn" title="Queue">
+            <i class="fas fa-list-ul"></i>
+          </button>
+          <button
+            id="fullscreenConnectBtn"
+            class="control-btn"
+            title="Connect to device"
+          >
+            <i class="fas fa-volume-up"></i>
+          </button>
+          <div class="volume-slider-container">
+            <span id="fullscreenVolumeIcon"
+              ><i class="fas fa-volume-high"></i
+            ></span>
+            <input
+              type="range"
+              id="fullscreenVolumeSlider"
+              min="0"
+              max="100"
+              value="100"
+              title="Volume"
+            />
+          </div>
         </div>
-        <div class="fullscreen-controls-container">
-            <div class="player-center fullscreen-player-center">
-                <div class="controls">
-                    <button id="fullscreenShuffleBtn" class="control-btn"><i class="fas fa-shuffle"></i></button>
-                    <button id="fullscreenPrevBtn" class="control-btn"><i class="fas fa-backward-step"></i></button>
-                    <button class="play-btn control-btn" id="fullscreenPlayPauseBtn"><i class="fas fa-play"></i></button>
-                    <button id="fullscreenNextBtn" class="control-btn"><i class="fas fa-forward-step"></i></button>
-                    <button id="fullscreenRepeatBtn" class="control-btn"><i class="fas fa-repeat"></i></button>
-                </div>
-                <div class="progress-slider-container">
-                    <span id="fullscreenCurrentTime">0:00</span>
-                    <input type="range" id="fullscreenProgressSlider" value="0" min="0" max="100">
-                    <span id="fullscreenDurationTime">0:00</span>
-                </div>
-            </div>
-            <div class="player-right fullscreen-player-right">
-                <button id="fullscreenLyricsBtn" class="control-btn"><i class="fas fa-align-left"></i></button>
-                <button id="fullscreenQueueBtn" class="control-btn"><i class="fas fa-list-ul"></i></button>
-                <button id="fullscreenConnectBtn" class="control-btn"><i class="fas fa-volume-up"></i></button>
-                <div class="volume-slider-container">
-                    <span id="fullscreenVolumeIcon"><i class="fas fa-volume-high"></i></span>
-                    <input type="range" id="fullscreenVolumeSlider" min="0" max="100" value="100">
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
     <audio id="audioPlayer"></audio>
-
-    <!-- Message box for temporary feedback -->
     <div id="messageBox" class="message-box"></div>
-
-    <script>
-        const mainContentView = document.getElementById("mainContentView"); // New
-        const artistViewContainer = document.getElementById("artistViewContainer"); // New
-        const backToHomeBtn = document.getElementById("backToHomeBtn"); // New
-        const artistHeaderImage = document.getElementById("artistHeaderImage"); // New
-        const artistHeaderName = document.getElementById("artistHeaderName"); // New
-        const monthlyListeners = document.getElementById("monthlyListeners"); // New
-        const artistSongsList = document.getElementById("artistSongsList"); // New
-
-        const songsContainer = document.getElementById("songsContainer");
-        const popularArtistsContainer = document.getElementById("popularArtistsContainer");
-        const searchInput = document.getElementById("searchInput");
-        const audioPlayer = document.getElementById("audioPlayer");
-        const messageBox = document.getElementById("messageBox");
-
-        let isPlaying = false;
-        let currentSongIndex = -1;
-        let originalSongs = []; // Stores all songs initially loaded from the DOM
-        let currentPlaylist = []; // Stores the currently displayed/filtered songs (either all songs or artist's songs)
-        let isShuffled = false;
-        let repeatMode = 'off'; // 'off', 'one', 'all'
-        let currentArtistFilter = null; // Stores the name of the artist currently being viewed
-
-        // --- Main Player UI Elements ---
-        const mainPlayerUI = {
-            playPauseBtn: document.getElementById("playPauseBtn"),
-            progressSlider: document.getElementById("progressSlider"),
-            volumeSlider: document.getElementById("volumeSlider"),
-            currentTitle: document.getElementById("current-title"),
-            currentArtist: document.getElementById("current-artist"),
-            playerArt: document.getElementById("player-art"),
-            currentTimeEl: document.getElementById("currentTime"),
-            durationTimeEl: document.getElementById("durationTime"),
-            volumeIcon: document.getElementById("volumeIcon"),
-            shuffleBtn: document.getElementById("shuffleBtn"),
-            prevBtn: document.getElementById("prevBtn"),
-            nextBtn: document.getElementById("nextBtn"),
-            repeatBtn: document.getElementById("repeatBtn"),
-            lyricsBtn: document.getElementById("lyricsBtn"),
-            queueBtn: document.getElementById("queueBtn"),
-            connectBtn: document.getElementById("connectBtn"), 
-            fullscreenBtn: document.getElementById("fullscreenBtn")
-        };
-
-        // --- Fullscreen Player UI Elements ---
-        const fullscreenPlayerUI = {
-            overlay: document.getElementById("fullscreenPlayer"),
-            minimizeBtn: document.getElementById("minimizeFullscreenBtn"),
-            playerArt: document.getElementById("fullscreen-player-art"),
-            playPauseBtn: document.getElementById("fullscreenPlayPauseBtn"),
-            progressSlider: document.getElementById("fullscreenProgressSlider"),
-            volumeSlider: document.getElementById("fullscreenVolumeSlider"),
-            currentTimeEl: document.getElementById("fullscreenCurrentTime"),
-            durationTimeEl: document.getElementById("fullscreenDurationTime"),
-            volumeIcon: document.getElementById("fullscreenVolumeIcon"),
-            shuffleBtn: document.getElementById("fullscreenShuffleBtn"),
-            prevBtn: document.getElementById("fullscreenPrevBtn"),
-            nextBtn: document.getElementById("fullscreenNextBtn"),
-            repeatBtn: document.getElementById("fullscreenRepeatBtn"),
-            lyricsBtn: document.getElementById("fullscreenLyricsBtn"),
-            queueBtn: document.getElementById("fullscreenQueueBtn"),
-            connectBtn: document.getElementById("fullscreenConnectBtn")
-        };
-
-        // Function to format time from seconds to MM:SS
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = Math.floor(seconds % 60);
-            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-        }
-
-        // Function to show temporary messages
-        function showMessage(message) {
-            messageBox.textContent = message;
-            messageBox.classList.add('show');
-            setTimeout(() => {
-                messageBox.classList.remove('show');
-            }, 2000); // Message disappears after 2 seconds
-        }
-
-        // Renders song cards into the specified container
-        function renderSongsIntoContainer(songsToRender, containerElement) {
-            containerElement.innerHTML = ''; // Clear existing songs
-            songsToRender.forEach((song, index) => {
-                const songCard = document.createElement('div');
-                // Use 'song-list-item' for artist view, 'song-card' for main view
-                songCard.classList.add(containerElement.id === 'songsContainer' ? 'song-card' : 'song-list-item');
-                songCard.setAttribute('data-song', song.url);
-                songCard.setAttribute('data-title', song.title);
-                songCard.setAttribute('data-artist', song.artist);
-                songCard.setAttribute('data-img', song.img);
-
-                if (containerElement.id === 'songsContainer') {
-                    // Standard song card for main view
-                    songCard.innerHTML = `
-                        <img src="${song.img}" alt="${song.title}">
-                        <div class="song-title">${song.title}</div>
-                        <div class="artist-name">${song.artist}</div>
-                    `;
-                } else {
-                    // List item for artist view
-                    songCard.innerHTML = `
-                        <span class="index">${index + 1}</span>
-                        <img src="${song.img}" alt="${song.title}">
-                        <div class="song-info">
-                            <div class="title">${song.title}</div>
-                            <div class="artist">${song.artist}</div>
-                        </div>
-                        <span class="duration">${song.duration || '0:00'}</span> <!-- Assuming you might add duration to song objects -->
-                    `;
-                }
-                
-                containerElement.appendChild(songCard);
-
-                // Attach click listener to the newly created card
-                songCard.addEventListener("click", () => {
-                    // When a card is clicked, load the song at its current index in the currentPlaylist
-                    loadSong(index);
-                });
-            });
-        }
-
-        // Initialize songs array and current playlist
-        function initializeSongs() {
-            // Populate originalSongs from the initial DOM elements
-            originalSongs = Array.from(document.querySelectorAll("#songsContainer .song-card")).map(card => ({
-                url: card.getAttribute("data-song"),
-                title: card.getAttribute("data-title"),
-                artist: card.getAttribute("data-artist"),
-                img: card.getAttribute("data-img"),
-                // Add a dummy duration for demonstration in artist view
-                duration: '3:45' 
-            }));
-            currentPlaylist = [...originalSongs]; // Start with all original songs
-            renderSongsIntoContainer(currentPlaylist, songsContainer); // Render them initially
-            renderArtists(); // Render artists after songs are initialized
-        }
-
-        // Renders artist cards into the popularArtistsContainer
-        function renderArtists() {
-            popularArtistsContainer.innerHTML = ''; // Clear existing artists
-
-            const uniqueArtists = new Set();
-            originalSongs.forEach(song => {
-                uniqueArtists.add(song.artist);
-            });
-
-            uniqueArtists.forEach(artistName => {
-                const artistCard = document.createElement('div');
-                artistCard.classList.add('artist-card');
-                
-                // Find an album art for this artist (can be improved for more robust artist images)
-                const representativeSong = originalSongs.find(song => song.artist === artistName);
-                const artistImg = representativeSong ? representativeSong.img : 'https://placehold.co/180x180/333/FFFFFF?text=Artist'; // Fallback image
-
-                artistCard.innerHTML = `
-                    <img src="${artistImg}" alt="${artistName}">
-                    <div class="artist-name-card">${artistName}</div>
-                    <div class="artist-type">Artist</div>
-                `;
-                // Store artist name as data attribute for easy retrieval on click
-                artistCard.setAttribute('data-artist-name', artistName);
-                popularArtistsContainer.appendChild(artistCard);
-
-                // Add a click listener for artist cards
-                artistCard.addEventListener("click", (event) => {
-                    const clickedArtistName = event.currentTarget.getAttribute('data-artist-name');
-                    showArtistSongs(clickedArtistName);
-                });
-            });
-        }
-
-        // NEW: Function to show songs by a specific artist
-        function showArtistSongs(artistName) {
-            currentArtistFilter = artistName; // Set the current artist filter
-            const artistSongs = originalSongs.filter(song => song.artist === artistName);
-
-            // Hide main content, show artist view
-            mainContentView.style.display = 'none';
-            artistViewContainer.style.display = 'flex';
-
-            // Update artist header info
-            const representativeSong = originalSongs.find(song => song.artist === artistName);
-            artistHeaderImage.src = representativeSong ? representativeSong.img : 'https://placehold.co/200x200/333/FFFFFF?text=Artist';
-            artistHeaderName.textContent = artistName;
-            // Dummy monthly listeners for now
-            monthlyListeners.textContent = `${Math.floor(Math.random() * (2000000 - 500000 + 1)) + 500000} monthly listeners`; 
-
-            // Render songs by this artist into the artistSongsList
-            renderSongsIntoContainer(artistSongs, artistSongsList);
-            currentPlaylist = artistSongs; // Update current playlist to artist's songs
-            currentSongIndex = -1; // Reset current song index for new playlist
-            pauseSong(); // Pause current playback
-            updatePlayerUI(); // Update player UI for new state
-        }
-
-        // NEW: Function to show the main content view
-        function showMainView() {
-            currentArtistFilter = null; // Clear the artist filter
-            // Hide artist view, show main content
-            artistViewContainer.style.display = 'none';
-            mainContentView.style.display = 'block';
-
-            currentPlaylist = [...originalSongs]; // Reset current playlist to all songs
-            renderSongsIntoContainer(currentPlaylist, songsContainer); // Re-render all songs
-            currentSongIndex = -1; // Reset current song index
-            pauseSong(); // Pause current playback
-            updatePlayerUI(); // Update player UI for new state
-            searchInput.value = ''; // Clear search input
-        }
-
-        // --- UI Update Function ---
-        function updatePlayerUI() {
-            // Update main player UI
-            if (currentSongIndex !== -1 && currentPlaylist[currentSongIndex]) { // Ensure song exists in currentPlaylist
-                const song = currentPlaylist[currentSongIndex];
-                mainPlayerUI.currentTitle.textContent = song.title;
-                mainPlayerUI.currentArtist.textContent = song.artist;
-                mainPlayerUI.playerArt.src = song.img;
-                mainPlayerUI.playerArt.style.display = 'block'; // Show if song is loaded
-            } else {
-                mainPlayerUI.currentTitle.textContent = "No song playing";
-                mainPlayerUI.currentArtist.textContent = "";
-                mainPlayerUI.playerArt.style.display = 'none'; // Hide if no song
-            }
-            
-            mainPlayerUI.playPauseBtn.querySelector('i').className = isPlaying ? "fas fa-pause" : "fas fa-play";
-            mainPlayerUI.shuffleBtn.classList.toggle('active', isShuffled);
-            mainPlayerUI.repeatBtn.classList.toggle('active', repeatMode !== 'off');
-            mainPlayerUI.repeatBtn.querySelector('i').className = repeatMode === 'one' ? "fas fa-repeat-1" : "fas fa-repeat";
-            
-            // Update fullscreen player UI
-            if (currentSongIndex !== -1 && currentPlaylist[currentSongIndex]) { // Ensure song exists
-                const song = currentPlaylist[currentSongIndex];
-                fullscreenPlayerUI.playerArt.src = song.img;
-                fullscreenPlayerUI.playerArt.style.display = 'block'; // Show if song is loaded
-            } else {
-                fullscreenPlayerUI.playerArt.style.display = 'none'; // Hide if no song
-            }
-
-            fullscreenPlayerUI.playPauseBtn.querySelector('i').className = isPlaying ? "fas fa-pause" : "fas fa-play";
-            fullscreenPlayerUI.shuffleBtn.classList.toggle('active', isShuffled);
-            fullscreenPlayerUI.repeatBtn.classList.toggle('active', repeatMode !== 'off');
-            fullscreenPlayerUI.repeatBtn.querySelector('i').className = repeatMode === 'one' ? "fas fa-repeat-1" : "fas fa-repeat";
-
-            // Update progress and volume sliders for both
-            mainPlayerUI.progressSlider.value = (audioPlayer.currentTime / audioPlayer.duration) * 100 || 0;
-            fullscreenPlayerUI.progressSlider.value = (audioPlayer.currentTime / audioPlayer.duration) * 100 || 0;
-
-            mainPlayerUI.currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-            fullscreenPlayerUI.currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-
-            mainPlayerUI.durationTimeEl.textContent = formatTime(audioPlayer.duration);
-            fullscreenPlayerUI.durationTimeEl.textContent = formatTime(audioPlayer.duration);
-
-            mainPlayerUI.volumeSlider.value = audioPlayer.volume * 100;
-            fullscreenPlayerUI.volumeSlider.value = audioPlayer.volume * 100;
-            
-            const currentVolumeIconClass = (audioPlayer.volume === 0) ? "fas fa-volume-off" :
-                                           (audioPlayer.volume < 0.5) ? "fas fa-volume-low" :
-                                           "fas fa-volume-high";
-            mainPlayerUI.volumeIcon.querySelector('i').className = currentVolumeIconClass;
-            fullscreenPlayerUI.volumeIcon.querySelector('i').className = currentVolumeIconClass;
-        }
-
-
-        function loadSong(index) {
-            if (index >= 0 && index < currentPlaylist.length) {
-                currentSongIndex = index;
-                const song = currentPlaylist[currentSongIndex];
-                audioPlayer.src = song.url;
-                playSong();
-                updatePlayerUI(); // Update UI immediately after loading
-            }
-        }
-
-        function playSong() {
-            audioPlayer.play();
-            isPlaying = true;
-            updatePlayerUI(); // Update UI after play
-        }
-
-        function pauseSong() {
-            audioPlayer.pause();
-            isPlaying = false;
-            updatePlayerUI(); // Update UI after pause
-        }
-
-        function prevSong() {
-            if (currentPlaylist.length === 0) return;
-            currentSongIndex = (currentSongIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-            loadSong(currentSongIndex);
-        }
-
-        function nextSong() {
-            if (currentPlaylist.length === 0) return;
-            currentSongIndex = (currentSongIndex + 1) % currentPlaylist.length;
-            loadSong(currentSongIndex);
-        }
-
-        // Shuffle functionality
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-            }
-            return array;
-        }
-
-        function toggleShuffle() {
-            isShuffled = !isShuffled;
-            if (isShuffled) {
-                const currentSong = currentPlaylist[currentSongIndex];
-                // Shuffle originalSongs if on main view, or current artist's songs if on artist view
-                const songsToShuffle = currentArtistFilter ? originalSongs.filter(song => song.artist === currentArtistFilter) : originalSongs;
-                currentPlaylist = shuffleArray([...songsToShuffle]); 
-                currentSongIndex = currentPlaylist.findIndex(song => song.url === currentSong.url);
-                showMessage("Shuffle ON");
-            } else {
-                const currentSong = currentPlaylist[currentSongIndex];
-                // Revert to original order based on current view
-                currentPlaylist = currentArtistFilter ? originalSongs.filter(song => song.artist === currentArtistFilter) : [...originalSongs];
-                currentSongIndex = currentPlaylist.findIndex(song => song.url === currentSong.url);
-                showMessage("Shuffle OFF");
-            }
-            // Render songs into the appropriate container based on the current view
-            if (currentArtistFilter) {
-                renderSongsIntoContainer(currentPlaylist, artistSongsList);
-            } else {
-                renderSongsIntoContainer(currentPlaylist, songsContainer);
-            }
-            updatePlayerUI(); // Update UI for shuffle state
-            if (isPlaying && currentSongIndex !== -1) {
-                // No need to reload, just update UI. Audio continues from current position.
-            }
-        }
-
-        // Repeat functionality
-        function toggleRepeat() {
-            if (repeatMode === 'off') {
-                repeatMode = 'all';
-                showMessage("Repeat All");
-            } else if (repeatMode === 'all') {
-                repeatMode = 'one';
-                showMessage("Repeat One");
-            } else { // repeatMode === 'one'
-                repeatMode = 'off';
-                showMessage("Repeat Off");
-            }
-            updatePlayerUI(); // Update UI for repeat state
-        }
-
-        // --- Event Listeners ---
-        initializeSongs(); // Call to populate originalSongs and currentPlaylist
-        updatePlayerUI(); // Initial UI update
-
-        // --- Search Functionality ---
-        searchInput.addEventListener("input", () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            let songsToFilter = currentArtistFilter ? originalSongs.filter(song => song.artist === currentArtistFilter) : originalSongs;
-            let filteredSongs = [];
-
-            if (searchTerm === "") {
-                filteredSongs = [...songsToFilter];
-            } else {
-                filteredSongs = songsToFilter.filter(song =>
-                    song.title.toLowerCase().includes(searchTerm) ||
-                    song.artist.toLowerCase().includes(searchTerm)
-                );
-            }
-            currentPlaylist = filteredSongs; // Update the current playlist to reflect search results
-            
-            // Render into the correct container based on current view
-            if (currentArtistFilter) {
-                renderSongsIntoContainer(currentPlaylist, artistSongsList);
-            } else {
-                renderSongsIntoContainer(currentPlaylist, songsContainer);
-            }
-            
-            // If the currently playing song is no longer in the filtered list, pause it
-            if (currentSongIndex !== -1 && !currentPlaylist.some(song => song.url === originalSongs[currentSongIndex].url)) {
-                pauseSong();
-                currentSongIndex = -1; // Reset current song index
-            } else if (currentSongIndex !== -1) {
-                // If the song is still in the list, update its index in the new currentPlaylist
-                const currentlyPlayingSong = originalSongs[currentSongIndex];
-                currentSongIndex = currentPlaylist.findIndex(song => song.url === currentlyPlayingSong.url);
-            }
-            updatePlayerUI(); // Ensure player UI reflects changes
-        });
-
-
-        // Audio Player Event Listeners
-        audioPlayer.addEventListener("loadedmetadata", updatePlayerUI);
-        audioPlayer.addEventListener("timeupdate", updatePlayerUI);
-        audioPlayer.addEventListener("ended", () => {
-            if (repeatMode === 'one') {
-                audioPlayer.currentTime = 0;
-                audioPlayer.play();
-            } else if (repeatMode === 'all') {
-                nextSong();
-            } else { // repeatMode === 'off'
-                if (currentSongIndex === currentPlaylist.length - 1) {
-                    pauseSong(); // Stop if it's the last song and not repeating
-                } else {
-                    nextSong();
-                }
-            }
-            updatePlayerUI(); // Ensure UI is updated after song ends/next song loads
-        });
-
-        // --- Main Player Control Listeners ---
-        mainPlayerUI.playPauseBtn.addEventListener("click", () => {
-            if (audioPlayer.src && currentSongIndex !== -1) { // Check if a song is loaded and valid
-                isPlaying ? pauseSong() : playSong();
-            } else if (currentPlaylist.length > 0) {
-                // If no song loaded but there are songs in the current playlist, play the first one
-                loadSong(0); 
-            } else {
-                showMessage("No songs available to play!");
-            }
-        });
-        mainPlayerUI.prevBtn.addEventListener("click", prevSong);
-        mainPlayerUI.nextBtn.addEventListener("click", nextSong);
-        mainPlayerUI.shuffleBtn.addEventListener("click", toggleShuffle);
-        mainPlayerUI.repeatBtn.addEventListener("click", toggleRepeat);
-        mainPlayerUI.progressSlider.addEventListener("input", () => {
-            const newTime = (mainPlayerUI.progressSlider.value / 100) * audioPlayer.duration;
-            audioPlayer.currentTime = newTime;
-            updatePlayerUI(); // Update UI after seeking
-        });
-        mainPlayerUI.volumeSlider.addEventListener("input", () => {
-            audioPlayer.volume = mainPlayerUI.volumeSlider.value / 100;
-            updatePlayerUI(); // Update UI after volume change
-        });
-
-        // --- Fullscreen Player Control Listeners ---
-        fullscreenPlayerUI.playPauseBtn.addEventListener("click", () => {
-            if (audioPlayer.src && currentSongIndex !== -1) { // Check if a song is loaded and valid
-                isPlaying ? pauseSong() : playSong();
-            } else if (currentPlaylist.length > 0) {
-                loadSong(0);
-            } else {
-                showMessage("No songs available to play!");
-            }
-        });
-        fullscreenPlayerUI.prevBtn.addEventListener("click", prevSong);
-        fullscreenPlayerUI.nextBtn.addEventListener("click", nextSong);
-        fullscreenPlayerUI.shuffleBtn.addEventListener("click", toggleShuffle);
-        fullscreenPlayerUI.repeatBtn.addEventListener("click", toggleRepeat);
-        fullscreenPlayerUI.progressSlider.addEventListener("input", () => {
-            const newTime = (fullscreenPlayerUI.progressSlider.value / 100) * audioPlayer.duration;
-            audioPlayer.currentTime = newTime;
-            updatePlayerUI(); // Update UI after seeking
-        });
-        fullscreenPlayerUI.volumeSlider.addEventListener("input", () => {
-            audioPlayer.volume = fullscreenPlayerUI.volumeSlider.value / 100;
-            updatePlayerUI(); // Update UI after volume change
-        });
-
-        // --- Other Button Functionality (Main and Fullscreen) ---
-        const commonButtonActions = {
-            lyrics: () => showMessage("Lyrics feature coming soon!"),
-            queue: () => showMessage("Queue management coming soon!"),
-            connect: () => showMessage("Connect to device functionality coming soon!")
-        };
-
-        mainPlayerUI.lyricsBtn.addEventListener("click", commonButtonActions.lyrics);
-        mainPlayerUI.queueBtn.addEventListener("click", commonButtonActions.queue);
-        mainPlayerUI.connectBtn.addEventListener("click", commonButtonActions.connect);
-
-        fullscreenPlayerUI.lyricsBtn.addEventListener("click", commonButtonActions.lyrics);
-        fullscreenPlayerUI.queueBtn.addEventListener("click", commonButtonActions.queue);
-        fullscreenPlayerUI.connectBtn.addEventListener("click", commonButtonActions.connect);
-
-        // Fullscreen Toggle
-        mainPlayerUI.fullscreenBtn.addEventListener("click", () => {
-            if (currentSongIndex === -1) {
-                showMessage("Please select a song to go fullscreen!");
-                return;
-            }
-            document.body.classList.add('fullscreen-active');
-            fullscreenPlayerUI.overlay.classList.add('active');
-            updatePlayerUI(); // Ensure fullscreen UI is updated when activated
-        });
-
-        fullscreenPlayerUI.minimizeBtn.addEventListener("click", () => {
-            document.body.classList.remove('fullscreen-active');
-            fullscreenPlayerUI.overlay.classList.remove('active');
-            updatePlayerUI(); // Ensure main player UI is updated when minimized
-        });
-
-        // Handle escape key to exit fullscreen
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && fullscreenPlayerUI.overlay.classList.contains('active')) {
-                document.body.classList.remove('fullscreen-active');
-                fullscreenPlayerUI.overlay.classList.remove('active');
-                updatePlayerUI();
-            }
-        });
-
-        // Event listener for the back button in artist view
-        backToHomeBtn.addEventListener("click", showMainView);
-
-        // Initial call to hide artist view
-        artistViewContainer.style.display = 'none';
-    </script>
+  </div>
+  {% include 'footer.html' %}
 </body>
-</html>

@@ -7,7 +7,9 @@ app_name = 'spotify'
 
 urlpatterns = [
     path('', home.as_view(), name='home'),
-  
+    path('artist/<int:artist_id>/', home.as_view(), name='artist_detail'),
+    
+
 ]
 
 if settings.DEBUG:
