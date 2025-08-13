@@ -148,5 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.display=(title.includes(term)||artist.includes(term))?'block':'none';
         });
     });
+
+
+
+    // search for artist
+       document.getElementById('searchInput').addEventListener('input',(e)=>{
+        const term=e.target.value.toLowerCase();
+        document.querySelectorAll('.popular-artists-container .artist-card').forEach(card=>{
+            const name=card.dataset.name.toLowerCase();
+            card.style.display=name.includes(term)?'block':'none';
+        });
+    });
 });
 </script>
