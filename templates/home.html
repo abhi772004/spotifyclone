@@ -2,8 +2,7 @@
 <body>
   <div class="sidebar">
     <h1><span class="gradient-text">Bajao 🎵</span></h1>
-    <a href="{% url 'spotify:home' %}" class="nav-link">🏠 Home</a>
-    <a href="#" class="nav-link">🔍 Search</a>
+    <a href="#" class="nav-link" id="homeLink">🏠 Home</a>
     <a href="#" class="nav-link">📚 Library</a>
     <a href="#" class="nav-link">❤️ Favourites</a>
 
@@ -21,14 +20,11 @@
 
     <div class="sidebar-footer">
       <a href="#" class="nav-link sidebar-footer-link">Legal</a>
-      <a href="#" class="nav-link sidebar-footer-link"
-        >Safety & Privacy Center</a
-      >
+      <a href="#" class="nav-link sidebar-footer-link">Safety & Privacy Center</a>
       <a href="#" class="nav-link sidebar-footer-link">Privacy Policy</a>
       <a href="#" class="nav-link sidebar-footer-link">Cookies</a>
       <a href="#" class="nav-link sidebar-footer-link">About Ads</a>
       <a href="#" class="nav-link sidebar-footer-link">Accessibility</a>
-      <a href="#" class="nav-link sidebar-footer-link">Cookies</a>
       <button class="sidebar-btn sidebar-footer-btn" title="Change language">
         <i class="fas fa-globe"></i> English
       </button>
@@ -37,113 +33,72 @@
 
   <div class="main">
     <div id="mainContentView">
-      <!-- artist page detail -->
-      {% if is_detail_page %}
-      <div class="artist-detail-container">
+      <!-- Artist Detail Container -->
+      <div class="artist-detail-container" style="display:none;">
         <div class="artist-header">
-          <img
-            src="{{ artist.image.url }}"
-            alt="{{ artist.name }}"
-            class="artist-detail-image"
-          />
+          <img src="" alt="" class="artist-detail-image" id="artistImage"/>
           <div class="artist-info">
-            <h1>{{ artist.name }}</h1>
-            {% if artist.verified %}
-            <span class="verified-badge">Verified Artist</span>
-            {% endif %}
-            <a href="{% url 'spotify:home' %}">← Back to all artists</a>
+            <h1 id="artistName"></h1>
+            <span class="verified-badge" id="artistVerified" style="display:none;">Verified Artist</span>
+            <button id="backToArtists" class="sidebar-btn">← Back to all artists</button>
           </div>
         </div>
+        <div class="artist-songs-list" id="artistSongsList"></div>
+      </div>
 
-        <div class="artist-songs-list">
-          <h2>Songs by {{ artist.name }}</h2>
-          {% if songs_by_artist %}
-       
-          {% for song in songs_by_artist %}
-          <div class="song-card" data-song="{{ song.audio_file.url }}">
-            <img src="{{ song.album_art.url }}" alt="{{ song.title }}" />
-            <div class="song-details">
-              <h3>{{ song.title }}</h3>
-              <h4>Artist: {{ song.artist.name }}</h4>
-            </div>
-          </div>
-          {% endfor %} {% else %}
-          <p>No songs found for this artist.</p>
-          {% endif %}
+      <!-- Home Section -->
+      <div class="home-section" id="homeSection">
+        <div class="hero">
+          <h2>Welcome to Bajao</h2>
+          <p>Feel the beat of Punjab. Stream timeless tracks by your favorite artists:</p>
         </div>
-      </div>
 
-      <!-- app start from here -->
-      {% else %}
-      <div class="hero">
-        <h2>Welcome to Bajao</h2>
-        <p>
-          Feel the beat of Punjab. Stream timeless tracks by your favorite
-          artists:
-        </p>
-      </div>
-
-      <div class="search-bar">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="🔍 Search songs or artists..."
-        />
-      </div>
-
-      <div class="section-header">
-        <div class="section-title">Trending songs</div>
-        <a href="#" class="show-all-link">Show all</a>
-      </div>
-      <div class="songs-container" id="songsContainer">
-        {% for song in songs %}
-        <div
-          class="song-card"
-          data-song="{{ song.audio_file.url }}"
-          data-title="{{ song.title }}"
-          data-artist="{{ song.artist.name }}"
-          data-img="{{ song.album_art.url }}"
-        >
-          <img src="{{ song.album_art.url }}" alt="{{ song.title }}" />
-          <div class="song-title">{{ song.title }}</div>
-          <div class="artist-name">{{ song.artist.name }}</div>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="🔍 Search songs or artists..."/>
         </div>
-        {% endfor %}
-      </div>
 
-      <div class="section-header">
-        <div class="section-title">Popular Artists</div>
-        <a href="#" class="show-all-link">Show all</a>
-      </div>
-      <div class="popular-artists-container" id="popularArtistsContainer">
-        {% for artist in artists %}
-        <a
-          href="{% url 'spotify:artist_detail' artist.id %}"
-          class="artist-card-link"
-        >
+        <div class="section-header">
+          <div class="section-title">Trending songs</div>
+          <a href="#" class="show-all-link">Show all</a>
+        </div>
+        <div class="songs-container" id="songsContainer">
+          {% for song in songs %}
           <div
-            class="artist-card"
-            data-artist-id="{{ artist.id }}"
-            data-name="{{ artist.name }}"
-            data-verified="{{ artist.verified }}"
-            data-img="{{ artist.image.url }}"
+            class="song-card"
+            data-song="{{ song.audio_file.url }}"
+            data-title="{{ song.title }}"
+            data-artist="{{ song.artist.name }}"
+            data-img="{{ song.album_art.url }}"
           >
+            <img src="{{ song.album_art.url }}" alt="{{ song.title }}" />
+            <div class="song-title">{{ song.title }}</div>
+            <div class="artist-name">{{ song.artist.name }}</div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="section-header">
+          <div class="section-title">Popular Artists</div>
+        </div>
+        <div class="popular-artists-container" id="popularArtistsContainer">
+          {% for artist in artists %}
+          <div class="artist-card" 
+               data-artist-id="{{ artist.id }}"
+               data-name="{{ artist.name }}"
+               data-verified="{{ artist.verified }}"
+               data-img="{{ artist.image.url }}">
             <img src="{{ artist.image.url }}" alt="{{ artist.name }}" />
             <div class="artist-name">{{ artist.name }}</div>
             {% if artist.verified %}
-            <span class="verified-badge"
-              ><i class="fas fa-check-circle"></i> Verified</span
-            >
+            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
             {% endif %}
           </div>
-        </a>
-        {% empty %}
-        <p>No artists found.</p>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
-      {% endif %}
     </div>
 
+    <!-- Custom Player -->
     <div class="custom-player">
       <div class="player-left">
         <img id="player-art" src="" alt="Album Art" />
@@ -152,161 +107,32 @@
           <div class="artist" id="current-artist"></div>
         </div>
       </div>
-
       <div class="player-center">
         <div class="controls">
-          <button id="shuffleBtn" class="control-btn" title="Shuffle">
-            <i class="fas fa-shuffle"></i>
-          </button>
-          <button id="prevBtn" class="control-btn" title="Previous">
-            <i class="fas fa-backward-step"></i>
-          </button>
-          <button
-            class="play-btn control-btn"
-            id="playPauseBtn"
-            title="Play/Pause"
-          >
-            <i class="fas fa-play"></i>
-          </button>
-          <button id="nextBtn" class="control-btn" title="Next">
-            <i class="fas fa-forward-step"></i>
-          </button>
-          <button id="repeatBtn" class="control-btn" title="Repeat">
-            <i class="fas fa-repeat"></i>
-          </button>
+          <button id="shuffleBtn" class="control-btn"><i class="fas fa-shuffle"></i></button>
+          <button id="prevBtn" class="control-btn"><i class="fas fa-backward-step"></i></button>
+          <button class="play-btn control-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
+          <button id="nextBtn" class="control-btn"><i class="fas fa-forward-step"></i></button>
+          <button id="repeatBtn" class="control-btn"><i class="fas fa-repeat"></i></button>
         </div>
         <div class="progress-slider-container">
           <span id="currentTime">0:00</span>
-          <input
-            type="range"
-            id="progressSlider"
-            value="0"
-            min="0"
-            max="100"
-            title="Song progress"
-          />
+          <input type="range" id="progressSlider" min="0" max="100" value="0"/>
           <span id="durationTime">0:00</span>
         </div>
       </div>
-
       <div class="player-right">
-        <button id="lyricsBtn" class="control-btn" title="Lyrics">
-          <i class="fas fa-align-left"></i>
-        </button>
-        <button id="queueBtn" class="control-btn" title="Queue">
-          <i class="fas fa-list-ul"></i>
-        </button>
-        <button id="connectBtn" class="control-btn" title="Connect to device">
-          <i class="fas fa-volume-up"></i>
-        </button>
         <div class="volume-slider-container">
           <span id="volumeIcon"><i class="fas fa-volume-high"></i></span>
-          <input
-            type="range"
-            id="volumeSlider"
-            min="0"
-            max="100"
-            value="100"
-            title="Volume"
-          />
+          <input type="range" id="volumeSlider" min="0" max="100" value="100"/>
         </div>
-        <button id="fullscreenBtn" class="control-btn" title="Fullscreen">
-          <i class="fas fa-expand"></i>
-        </button>
-      </div>
-    </div>
-
-    <div id="fullscreenPlayer" class="fullscreen-player-overlay">
-      <div class="fullscreen-header">
-        <button
-          id="minimizeFullscreenBtn"
-          class="control-btn minimize-btn"
-          title="Minimize fullscreen"
-        >
-          <i class="fas fa-compress"></i>
-        </button>
-      </div>
-      <div class="fullscreen-content">
-        <img
-          id="fullscreen-player-art"
-          src=""
-          alt="Album Art"
-          class="fullscreen-album-art"
-        />
-      </div>
-      <div class="fullscreen-controls-container">
-        <div class="player-center fullscreen-player-center">
-          <div class="controls">
-            <button
-              id="fullscreenShuffleBtn"
-              class="control-btn"
-              title="Shuffle"
-            >
-              <i class="fas fa-shuffle"></i>
-            </button>
-            <button id="fullscreenPrevBtn" class="control-btn" title="Previous">
-              <i class="fas fa-backward-step"></i>
-            </button>
-            <button
-              class="play-btn control-btn"
-              id="fullscreenPlayPauseBtn"
-              title="Play/Pause"
-            >
-              <i class="fas fa-play"></i>
-            </button>
-            <button id="fullscreenNextBtn" class="control-btn" title="Next">
-              <i class="fas fa-forward-step"></i>
-            </button>
-            <button id="fullscreenRepeatBtn" class="control-btn" title="Repeat">
-              <i class="fas fa-repeat"></i>
-            </button>
-          </div>
-          <div class="progress-slider-container">
-            <span id="fullscreenCurrentTime">0:00</span>
-            <input
-              type="range"
-              id="fullscreenProgressSlider"
-              value="0"
-              min="0"
-              max="100"
-              title="Song progress"
-            />
-            <span id="fullscreenDurationTime">0:00</span>
-          </div>
-        </div>
-        <div class="player-right fullscreen-player-right">
-          <button id="fullscreenLyricsBtn" class="control-btn" title="Lyrics">
-            <i class="fas fa-align-left"></i>
-          </button>
-          <button id="fullscreenQueueBtn" class="control-btn" title="Queue">
-            <i class="fas fa-list-ul"></i>
-          </button>
-          <button
-            id="fullscreenConnectBtn"
-            class="control-btn"
-            title="Connect to device"
-          >
-            <i class="fas fa-volume-up"></i>
-          </button>
-          <div class="volume-slider-container">
-            <span id="fullscreenVolumeIcon"
-              ><i class="fas fa-volume-high"></i
-            ></span>
-            <input
-              type="range"
-              id="fullscreenVolumeSlider"
-              min="0"
-              max="100"
-              value="100"
-              title="Volume"
-            />
-          </div>
-        </div>
+        <button id="fullscreenBtn" class="control-btn"><i class="fas fa-expand"></i></button>
       </div>
     </div>
 
     <audio id="audioPlayer"></audio>
     <div id="messageBox" class="message-box"></div>
   </div>
+
   {% include 'footer.html' %}
 </body>
