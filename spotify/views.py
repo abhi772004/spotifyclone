@@ -4,19 +4,23 @@ from .models import  *
 from django.views.generic import ListView
 
 class home(View):
+    def get(self, request):
+        songs = Song.objects.all()
+        return render(request, 'home.html', {'songs': songs})
 
- def get(self, request):
-    return render(request, 'home.html')
+
+    
+    
+    
+
+ 
  
 
- 
- 
+# class songview(ListView):
+#    model = Song
+#    template_name = 'content/song_list.html'
+#    context_object_name = 'songs'
 
-class songview(ListView):
-   model = Song
-   template_name = 'content/song_list.html'
-   context_object_name = 'songs'
-
-   def get_queryset(self):
-       return Song.objects.select_related('artist').all()
+#    def get_queryset(self):
+#        return Song.objects.select_related('artist').all()
 

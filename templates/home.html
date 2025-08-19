@@ -44,22 +44,22 @@
       </div>
     </div>
 
-
-
-    <!-- Songs page -->
-     <h1>All Songs</h1>
-
-    <div class="song-container">
+<div class="song-row-container">
+    <h3>All Songs</h3>
+    <div class="song-row" id="songRow">
         {% for song in songs %}
             <div class="song-card" data-audio="{{ song.audio.url }}" data-title="{{ song.title }}">
                 <img src="{{ song.songimg.url }}" alt="{{ song.title }}">
-                <h3>{{ song.title }}</h3>
+                <h4>{{ song.title }}</h4>
                 <p>{{ song.artist.name }}</p>
             </div>
         {% empty %}
             <p>No songs available.</p>
         {% endfor %}
-    </div
+    </div>
+</div>
+
+
 
     <!-- Custom Player -->
     <div class="custom-player">

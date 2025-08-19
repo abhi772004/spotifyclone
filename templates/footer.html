@@ -1,163 +1,74 @@
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const audioPlayer = document.getElementById("audioPlayer");
-    const messageBox = document.getElementById("messageBox");
+const audioPlayer = document.getElementById('audioPlayer');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const currentTitle = document.getElementById('current-title');
+const currentArtist = document.getElementById('current-artist');
+const playerArt = document.getElementById('player-art');
+const progressSlider = document.getElementById('progressSlider');
+const currentTimeElem = document.getElementById('currentTime');
+const durationTimeElem = document.getElementById('durationTime');
+const volumeSlider = document.getElementById('volumeSlider');
 
-    const mainPlayerUI = {
-        playPauseBtn: document.getElementById("playPauseBtn"),
-        progressSlider: document.getElementById("progressSlider"),
-        volumeSlider: document.getElementById("volumeSlider"),
-        currentTitle: document.getElementById("current-title"),
-        currentArtist: document.getElementById("current-artist"),
-        playerArt: document.getElementById("player-art"),
-        currentTimeEl: document.getElementById("currentTime"),
-        durationTimeEl: document.getElementById("durationTime"),
-        volumeIcon: document.getElementById("volumeIcon")
-    };
+let currentSong = null;
 
-    let currentPlaylist = [];
-    let currentSongIndex = -1;
-    let isPlaying = false;
+// Play song when clicking a song card
+document.querySelectorAll('.song-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const audioUrl = card.getAttribute('data-audio');
+        const title = card.getAttribute('data-title');
+        const artist = card.querySelector('p').textContent;
+        const art = card.querySelector('img').src;
 
-    function showMessage(msg){
-        messageBox.textContent = msg;
-        messageBox.classList.add('show');
-        setTimeout(()=>messageBox.classList.remove('show'),2000);
-    }
+        // Set current song and update player
+        currentSong = audioUrl;
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
 
-    function formatTime(seconds){
-        if(isNaN(seconds)||seconds<0) return '0:00';
-        const m=Math.floor(seconds/60), s=Math.floor(seconds%60);
-        return `${m}:${s<10?'0':''}${s}`;
-    }
+        currentTitle.textContent = title;
+        currentArtist.textContent = artist;
+        playerArt.src = art;
 
-    function loadSong(index){
-        if(index<0||index>=currentPlaylist.length) return;
-        currentSongIndex=index;
-        const song=currentPlaylist[currentSongIndex];
-        audioPlayer.src=song.url;
-        audioPlayer.currentTime=0;
-        playSong();
-        updatePlayerUI();
-    }
-
-    function playSong(){
-        if(audioPlayer.src){ audioPlayer.play(); isPlaying=true; updatePlayerUI(); }
-    }
-
-    function pauseSong(){ audioPlayer.pause(); isPlaying=false; updatePlayerUI(); }
-
-    function nextSong(){ currentSongIndex=(currentSongIndex+1)%currentPlaylist.length; loadSong(currentSongIndex); }
-    function prevSong(){ currentSongIndex=(currentSongIndex-1+currentPlaylist.length)%currentPlaylist.length; loadSong(currentSongIndex); }
-
-    function togglePlayPause(){ isPlaying?pauseSong():playSong(); }
-
-    function updatePlayerUI(){
-        const song=currentPlaylist[currentSongIndex];
-        if(song){
-            mainPlayerUI.currentTitle.textContent=song.title;
-            mainPlayerUI.currentArtist.textContent=song.artist;
-            mainPlayerUI.playerArt.src=song.img;
-        }else{
-            mainPlayerUI.currentTitle.textContent="No song playing";
-            mainPlayerUI.currentArtist.textContent="";
-            mainPlayerUI.playerArt.src="";
-        }
-        mainPlayerUI.playPauseBtn.querySelector('i').className=isPlaying?"fas fa-pause":"fas fa-play";
-        mainPlayerUI.progressSlider.value=audioPlayer.duration? (audioPlayer.currentTime/audioPlayer.duration*100):0;
-        mainPlayerUI.currentTimeEl.textContent=formatTime(audioPlayer.currentTime);
-        mainPlayerUI.durationTimeEl.textContent=formatTime(audioPlayer.duration);
-        mainPlayerUI.volumeSlider.value=audioPlayer.volume*100;
-    }
-
-    mainPlayerUI.playPauseBtn.addEventListener('click', togglePlayPause);
-    mainPlayerUI.nextBtn?.addEventListener('click', nextSong);
-    mainPlayerUI.prevBtn?.addEventListener('click', prevSong);
-    mainPlayerUI.progressSlider.addEventListener('input',()=>{
-        audioPlayer.currentTime=(mainPlayerUI.progressSlider.value/100)*audioPlayer.duration;
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
     });
-    mainPlayerUI.volumeSlider.addEventListener('input',()=>{
-        audioPlayer.volume=mainPlayerUI.volumeSlider.value/100;
-        updatePlayerUI();
-    });
+});
 
-    audioPlayer.addEventListener('timeupdate', updatePlayerUI);
-
-    // --- Song card click ---
-    function setupSongs(){
-        const songCards=document.querySelectorAll('.song-card');
-        currentPlaylist=Array.from(songCards).map(card=>({
-            url: card.dataset.song,
-            title: card.dataset.title,
-            artist: card.dataset.artist,
-            img: card.dataset.img
-        }));
-        songCards.forEach((card,index)=>{
-            card.addEventListener('click',()=>loadSong(index));
-        });
+// Play/Pause toggle
+playPauseBtn.addEventListener('click', () => {
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+        audioPlayer.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     }
+});
 
-    setupSongs();
+// Update progress slider as song plays
+audioPlayer.addEventListener('timeupdate', () => {
+    const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressSlider.value = progressPercent || 0;
 
-    // --- Artist click ---
-    const artistCards=document.querySelectorAll('.artist-card');
-    artistCards.forEach(card=>{
-        card.addEventListener('click',()=>{
-            const artistSection=document.querySelector('.artist-detail-container');
-            const homeSection=document.getElementById('homeSection');
-            const songsList=document.getElementById('artistSongsList');
+    // Display time
+    let mins = Math.floor(audioPlayer.currentTime / 60);
+    let secs = Math.floor(audioPlayer.currentTime % 60);
+    if (secs < 10) secs = '0' + secs;
+    currentTimeElem.textContent = `${mins}:${secs}`;
 
-            homeSection.style.display='none';
-            artistSection.style.display='block';
-            document.getElementById('artistName').textContent=card.dataset.name;
-            document.getElementById('artistImage').src=card.dataset.img;
-            if(card.dataset.verified==='True'){
-                document.getElementById('artistVerified').style.display='inline';
-            }else{
-                document.getElementById('artistVerified').style.display='none';
-            }
+    let dMins = Math.floor(audioPlayer.duration / 60) || 0;
+    let dSecs = Math.floor(audioPlayer.duration % 60) || 0;
+    if (dSecs < 10) dSecs = '0' + dSecs;
+    durationTimeElem.textContent = `${dMins}:${dSecs}`;
+});
 
-            // Mock: Get songs from original playlist by artist
-            const artistSongs=currentPlaylist.filter(s=>s.artist===card.dataset.name);
-            songsList.innerHTML='';
-            artistSongs.forEach((s,i)=>{
-                const div=document.createElement('div');
-                div.className='song-card';
-                div.dataset.song=s.url;
-                div.dataset.title=s.title;
-                div.dataset.artist=s.artist;
-                div.dataset.img=s.img;
-                div.innerHTML=`<img src="${s.img}" alt="${s.title}"/><div class="song-title">${s.title}</div><div class="artist-name">${s.artist}</div>`;
-                div.addEventListener('click',()=>loadSong(currentPlaylist.findIndex(x=>x.url===s.url)));
-                songsList.appendChild(div);
-            });
-        });
-    });
+// Seek song using slider
+progressSlider.addEventListener('input', () => {
+    if (audioPlayer.duration) {
+        audioPlayer.currentTime = (progressSlider.value / 100) * audioPlayer.duration;
+    }
+});
 
-    document.getElementById('backToArtists').addEventListener('click',()=>{
-        document.getElementById('homeSection').style.display='block';
-        document.querySelector('.artist-detail-container').style.display='none';
-    });
-
-    // --- Search bar ---
-    document.getElementById('searchInput').addEventListener('input',(e)=>{
-        const term=e.target.value.toLowerCase();
-        document.querySelectorAll('.song-card').forEach(card=>{
-            const title=card.dataset.title.toLowerCase();
-            const artist=card.dataset.artist.toLowerCase();
-            card.style.display=(title.includes(term)||artist.includes(term))?'block':'none';
-        });
-    });
-
-
-
-    // search for artist
-       document.getElementById('searchInput').addEventListener('input',(e)=>{
-        const term=e.target.value.toLowerCase();
-        document.querySelectorAll('.popular-artists-container .artist-card').forEach(card=>{
-            const name=card.dataset.name.toLowerCase();
-            card.style.display=name.includes(term)?'block':'none';
-        });
-    });
+// Volume control
+volumeSlider.addEventListener('input', () => {
+    audioPlayer.volume = volumeSlider.value / 100;
 });
 </script>

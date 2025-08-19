@@ -7,7 +7,7 @@ app_name = 'spotify'
 
 urlpatterns = [
     path('', home.as_view(), name='home'),
-    path('songs/', songview.as_view(), name='song_list'),
+    # path('songs/', songview.as_view(), name='song_list'),
 
 
 

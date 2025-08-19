@@ -794,6 +794,68 @@
             }
         }
 
+        .song-row-container {
+    margin: 20px 0;
+    padding: 0 10px;
+}
+
+.song-row {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+}
+
+.song-row::-webkit-scrollbar {
+    height: 8px;
+}
+
+.song-row::-webkit-scrollbar-thumb {
+    background: #ff4da6; /* sexy neon thumb */
+    border-radius: 4px;
+}
+
+.song-card {
+    min-width: 180px;
+    flex-shrink: 0;
+    background: #2c0b2e;
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 77, 166, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.song-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(255, 77, 166, 0.7);
+}
+
+.song-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.song-card:hover img {
+    transform: scale(1.05);
+}
+
+.song-card h4 {
+    margin: 8px 0 4px;
+    color: #ff4da6;
+    font-size: 1em;
+}
+
+.song-card p {
+    margin: 0 0 8px;
+    color: #f0c0e0;
+    font-size: 0.85em;
+}
+
 
 
 
