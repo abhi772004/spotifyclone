@@ -2,7 +2,7 @@
 <body>
   <div class="sidebar">
     <h1><span class="gradient-text">Bajao 🎵</span></h1>
-    <a href="#" class="nav-link" id="homeLink">🏠 Home</a>
+    <a href="{% url 'spotify:home' %}" class="nav-link" id="homeLink">🏠 Home</a>
     <a href="#" class="nav-link">📚 Library</a>
     <a href="#" class="nav-link">❤️ Favourites</a>
 
@@ -31,72 +31,35 @@
     </div>
   </div>
 
-  <div class="main">
-    <div id="mainContentView">
-      <!-- Artist Detail Container -->
-      <div class="artist-detail-container" style="display:none;">
-        <div class="artist-header">
-          <img src="" alt="" class="artist-detail-image" id="artistImage"/>
-          <div class="artist-info">
-            <h1 id="artistName"></h1>
-            <span class="verified-badge" id="artistVerified" style="display:none;">Verified Artist</span>
-            <button id="backToArtists" class="sidebar-btn">← Back to all artists</button>
-          </div>
-        </div>
-        <div class="artist-songs-list" id="artistSongsList"></div>
+  <div class="main-content">
+    <!-- Home Section -->
+    <div class="home-section" id="homeSection">
+      <div class="hero">
+        <h2>Welcome to Bajao</h2>
+        <p>Feel the beat of Punjab. Stream timeless tracks by your favorite artists:</p>
       </div>
 
-      <!-- Home Section -->
-      <div class="home-section" id="homeSection">
-        <div class="hero">
-          <h2>Welcome to Bajao</h2>
-          <p>Feel the beat of Punjab. Stream timeless tracks by your favorite artists:</p>
-        </div>
-
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="🔍 Search songs or artists..."/>
-        </div>
-
-        <div class="section-header">
-          <div class="section-title">Trending songs</div>
-          <a href="#" class="show-all-link">Show all</a>
-        </div>
-        <div class="songs-container" id="songsContainer">
-          {% for song in songs %}
-          <div
-            class="song-card"
-            data-song="{{ song.audio_file.url }}"
-            data-title="{{ song.title }}"
-            data-artist="{{ song.artist.name }}"
-            data-img="{{ song.album_art.url }}"
-          >
-            <img src="{{ song.album_art.url }}" alt="{{ song.title }}" />
-            <div class="song-title">{{ song.title }}</div>
-            <div class="artist-name">{{ song.artist.name }}</div>
-          </div>
-          {% endfor %}
-        </div>
-
-        <div class="section-header">
-          <div class="section-title">Popular Artists</div>
-        </div>
-        <div class="popular-artists-container" id="popularArtistsContainer">
-          {% for artist in artists %}
-          <div class="artist-card" 
-               data-artist-id="{{ artist.id }}"
-               data-name="{{ artist.name }}"
-               data-verified="{{ artist.verified }}"
-               data-img="{{ artist.image.url }}">
-            <img src="{{ artist.image.url }}" alt="{{ artist.name }}" />
-            <div class="artist-name">{{ artist.name }}</div>
-            {% if artist.verified %}
-            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-            {% endif %}
-          </div>
-          {% endfor %}
-        </div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="🔍 Search songs..."/>
       </div>
     </div>
+
+
+
+    <!-- Songs page -->
+     <h1>All Songs</h1>
+
+    <div class="song-container">
+        {% for song in songs %}
+            <div class="song-card" data-audio="{{ song.audio.url }}" data-title="{{ song.title }}">
+                <img src="{{ song.songimg.url }}" alt="{{ song.title }}">
+                <h3>{{ song.title }}</h3>
+                <p>{{ song.artist.name }}</p>
+            </div>
+        {% empty %}
+            <p>No songs available.</p>
+        {% endfor %}
+    </div
 
     <!-- Custom Player -->
     <div class="custom-player">
