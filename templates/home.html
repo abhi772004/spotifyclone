@@ -60,6 +60,47 @@
 </div>
 
 
+<div class="song-row-container">
+    <h3>All Artists</h3>
+    <div class="song-row" id="songRow">
+        {% for artist in artists %}
+            <div class="song-card" >
+              <a href="{% url 'spotify:artistdetail' artist.pk %}">
+                <img src="{{ artist.image.url }}" alt="{{ artist.title }}">
+                <h4>{{ artist.title }}</h4>
+                <p>{{ artist.name }}</p>
+              </a>
+            </div>
+        {% empty %}
+            <p>No songs available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="song-row-container">
+    <h3>treanding albums</h3>
+    <div class="song-row" id="songRow">
+        {% for h in albums %}
+            <div class="song-card">
+              <a href="{% url 'spotify:albumdetail' h.pk %}">
+                <img src="{{ h.coverimage.url }}">
+                <h4>{{ h.albumname }}</h4>
+              </a>
+            </div>
+        {% empty %}
+            <p>No songs available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
 
     <!-- Custom Player -->
     <div class="custom-player">

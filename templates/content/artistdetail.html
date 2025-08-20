@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ artist.name }}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #12141d, #1b1e2b);
+      color: #fff;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+    }
+    .artist-img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #2c2f3f;
+      margin-bottom: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    .artist-name {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    .back-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #2c2f3f;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: #444a63;
+    }
+
+    /* Songs Section */
+    .songs-section {
+      margin: 30px auto;
+      max-width: 1000px;
+      padding: 0 15px;
+    }
+    .songs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 18px;
+      justify-items: center;
+    }
+
+    /* Song Cube */
+    .song-card {
+      width: 140px;
+      height: 170px;
+      background: #1f2333;
+      border-radius: 12px;
+      padding: 8px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+    .song-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    }
+    .song-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+    .song-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #eee;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Player Modal */
+    .player-modal {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: -200px;
+      background: #0f1117;
+      color: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: bottom 0.4s ease;
+    }
+    .player-modal.active {
+      bottom: 0;
+    }
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .player-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .player-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .player-artist {
+      font-size: 12px;
+      color: #bbb;
+    }
+    .player-controls {
+      flex-shrink: 0;
+    }
+    audio {
+      height: 35px;
+      filter: invert(100%) brightness(120%);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <img src="{{ artist.image.url }}" alt="{{ artist.name }}" class="artist-img">
+    <div class="artist-name">{{ artist.name }}</div>
+    <a href="{% url 'spotify:home' %}" class="back-btn"
+       onclick="if (history.length > 1) { history.back(); return false; }">← Back</a>
+  </div>
+
+  <!-- Songs Section -->
+  <div class="songs-section">
+    <div class="songs-grid">
+      {% for song in songs %}
+        <div class="song-card"
+             data-audio="{{ song.audio.url }}"
+             data-title="{{ song.title }}"
+             data-img="{{ song.songimg.url }}"
+             data-artist="{{ artist.name }}">
+          <img src="{{ song.songimg.url }}" alt="{{ song.title }}" class="song-img">
+          <div class="song-name">{{ song.title }}</div>
+        </div>
+      {% empty %}
+        <p>No songs available for this artist.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Player Modal -->
+  <div class="player-modal" id="playerModal">
+    <div class="player-info">
+      <img id="playerImg" class="player-img" src="" alt="">
+      <div>
+        <div id="playerTitle" class="player-title">Song Title</div>
+        <div id="playerArtist" class="player-artist">{{ artist.name }}</div>
+      </div>
+    </div>
+    <div class="player-controls">
+      <audio id="audioPlayer" controls></audio>
+    </div>
+  </div>
+
+  <script>
+    const songCards = document.querySelectorAll(".song-card");
+    const playerModal = document.getElementById("playerModal");
+    const playerImg = document.getElementById("playerImg");
+    const playerTitle = document.getElementById("playerTitle");
+    const playerArtist = document.getElementById("playerArtist");
+    const audioPlayer = document.getElementById("audioPlayer");
+
+    songCards.forEach(card => {
+      card.addEventListener("click", () => {
+        const audio = card.getAttribute("data-audio");
+        const title = card.getAttribute("data-title");
+        const img = card.getAttribute("data-img");
+        const artist = card.getAttribute("data-artist");
+
+        playerImg.src = img;
+        playerTitle.textContent = title;
+        playerArtist.textContent = artist;
+        audioPlayer.src = audio;
+
+        playerModal.classList.add("active");
+        audioPlayer.play();
+      });
+    });
+  </script>
+
+</body>
+</html>
