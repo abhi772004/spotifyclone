@@ -21,10 +21,10 @@ class artistview(DetailView):
         context = super().get_context_data(**kwargs)
         artist=self.object
         context['songs'] = Song.objects.filter(artists=artist)
+        print(context,'ccccccccccccccc')
         return context
 
- 
- 
+
 
 class albumview(DetailView):
     model = Album
@@ -38,3 +38,4 @@ class albumview(DetailView):
         context["songs"] = Song.objects.filter(album=album)
         return context
 
+    

@@ -25,3 +25,5 @@ class Album(models.Model):
    artist=models.ManyToManyField(Artist, related_name='albums')
    def __str__(self):
       return self.albumname
+   
+

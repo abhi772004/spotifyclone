@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'spotify.middleware.RequestLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -143,3 +144,30 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # This is the URL prefix for the media files.
 MEDIA_URL = '/media/'
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'requests.log',   # stored in project root
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'spotify.middleware': {   # match module name
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+
