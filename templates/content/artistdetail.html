@@ -135,6 +135,17 @@
       height: 35px;
       filter: invert(100%) brightness(120%);
     }
+
+
+  .artist-description {
+  font-size: 15px;
+  font-weight: 400;
+  color: #bbb;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  line-height: 1.5;
+}
+
   </style>
 </head>
 <body>
@@ -143,6 +154,7 @@
   <div class="header">
     <img src="{{ artist.image.url }}" alt="{{ artist.name }}" class="artist-img">
     <div class="artist-name">{{ artist.name }}</div>
+    <div class="artist-description">{{ artist.desc }}</div>
     <a href="{% url 'spotify:home' %}" class="back-btn"
        onclick="if (history.length > 1) { history.back(); return false; }">← Back</a>
   </div>
