@@ -171,3 +171,10 @@ LOGGING = {
 }
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+       'LOCATION': 'unique-snowflake',  # make sure this folder exists
+    }
+}
+

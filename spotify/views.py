@@ -1,16 +1,28 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views import View
-from .models import  *
-from django.views.generic import ListView,DetailView
+from django.views.generic import DetailView
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from .models import Song, Artist, Album
 
+
+# Home Page - cache for 30s
+@method_decorator(cache_page(30), name='dispatch')
 class home(View):
     def get(self, request):
+        print("⚡ Fetching songs, artists, albums from DB...")  # Debug log
         songs = Song.objects.all()
         artists = Artist.objects.all()
         albums = Album.objects.all()
-        return render(request, 'home.html', {'songs': songs, 'artists': artists, 'albums': albums})
+        return render(request, 'home.html', {
+            'songs': songs,
+            'artists': artists,
+            'albums': albums
+        })
 
 
+# Artist Detail - cache for 20s
+@method_decorator(cache_page(20), name='dispatch')
 class artistview(DetailView):
     model = Artist
     template_name = 'content/artistdetail.html'
@@ -19,13 +31,14 @@ class artistview(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        artist=self.object
+        artist = self.object
         context['songs'] = Song.objects.filter(artists=artist)
-        print(context,'ccccccccccccccc')
+        print("⚡ Fetching songs for artist from DB...")  # Debug log
         return context
 
 
-
+# Album Detail - cache for 20s
+@method_decorator(cache_page(20), name='dispatch')
 class albumview(DetailView):
     model = Album
     template_name = "content/albumdetail.html"
@@ -36,6 +49,5 @@ class albumview(DetailView):
         context = super().get_context_data(**kwargs)
         album = self.object
         context["songs"] = Song.objects.filter(album=album)
+        print("⚡ Fetching songs for album from DB...")  # Debug log
         return context
-
-    

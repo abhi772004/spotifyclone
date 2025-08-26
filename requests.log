@@ -1,113 +1,44 @@
-[2025-08-26 10:55:36] GET / from 127.0.0.1
-[2025-08-26 10:55:36] Response status: 500 for GET /
-[2025-08-26 10:55:37] GET /favicon.ico from 127.0.0.1
-[2025-08-26 10:55:37] Response status: 404 for GET /favicon.ico
-[2025-08-26 10:57:13] GET /admin/ from 127.0.0.1
-[2025-08-26 10:57:13] Response status: 200 for GET /admin/
-[2025-08-26 10:57:18] GET /admin/spotify/artist/add/ from 127.0.0.1
-[2025-08-26 10:57:18] Response status: 200 for GET /admin/spotify/artist/add/
-[2025-08-26 10:57:18] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:18] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:20] GET /admin/spotify/artist/ from 127.0.0.1
-[2025-08-26 10:57:20] Response status: 200 for GET /admin/spotify/artist/
-[2025-08-26 10:57:20] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:20] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:22] GET /admin/spotify/artist/5/change/ from 127.0.0.1
-[2025-08-26 10:57:22] Response status: 200 for GET /admin/spotify/artist/5/change/
-[2025-08-26 10:57:22] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:22] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:24] GET /admin/spotify/artist/5/delete/ from 127.0.0.1
-[2025-08-26 10:57:24] Response status: 200 for GET /admin/spotify/artist/5/delete/
-[2025-08-26 10:57:26] POST /admin/spotify/artist/5/delete/ from 127.0.0.1
-[2025-08-26 10:57:26] Response status: 302 for POST /admin/spotify/artist/5/delete/
-[2025-08-26 10:57:26] GET /admin/spotify/artist/ from 127.0.0.1
-[2025-08-26 10:57:26] Response status: 200 for GET /admin/spotify/artist/
-[2025-08-26 10:57:26] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:26] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:28] GET /admin/spotify/artist/4/change/ from 127.0.0.1
-[2025-08-26 10:57:28] Response status: 200 for GET /admin/spotify/artist/4/change/
-[2025-08-26 10:57:28] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:28] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:29] GET /admin/spotify/artist/4/delete/ from 127.0.0.1
-[2025-08-26 10:57:29] Response status: 200 for GET /admin/spotify/artist/4/delete/
-[2025-08-26 10:57:30] POST /admin/spotify/artist/4/delete/ from 127.0.0.1
-[2025-08-26 10:57:30] Response status: 302 for POST /admin/spotify/artist/4/delete/
-[2025-08-26 10:57:30] GET /admin/spotify/artist/ from 127.0.0.1
-[2025-08-26 10:57:30] Response status: 200 for GET /admin/spotify/artist/
-[2025-08-26 10:57:30] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:30] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:34] GET / from 127.0.0.1
-[2025-08-26 10:57:34] Response status: 500 for GET /
-[2025-08-26 10:57:36] GET / from 127.0.0.1
-[2025-08-26 10:57:36] Response status: 500 for GET /
-[2025-08-26 10:57:47] GET / from 127.0.0.1
-[2025-08-26 10:57:47] Response status: 500 for GET /
-[2025-08-26 10:57:51] GET /admin/ from 127.0.0.1
-[2025-08-26 10:57:51] Response status: 200 for GET /admin/
-[2025-08-26 10:57:54] GET /admin/spotify/album/ from 127.0.0.1
-[2025-08-26 10:57:54] Response status: 200 for GET /admin/spotify/album/
-[2025-08-26 10:57:54] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:54] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:56] GET /admin/spotify/album/6/change/ from 127.0.0.1
-[2025-08-26 10:57:56] Response status: 200 for GET /admin/spotify/album/6/change/
-[2025-08-26 10:57:56] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:57:56] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:57:57] GET /admin/spotify/album/6/delete/ from 127.0.0.1
-[2025-08-26 10:57:57] Response status: 200 for GET /admin/spotify/album/6/delete/
-[2025-08-26 10:58:00] POST /admin/spotify/album/6/delete/ from 127.0.0.1
-[2025-08-26 10:58:00] Response status: 302 for POST /admin/spotify/album/6/delete/
-[2025-08-26 10:58:00] GET /admin/spotify/album/ from 127.0.0.1
-[2025-08-26 10:58:00] Response status: 200 for GET /admin/spotify/album/
-[2025-08-26 10:58:00] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:58:00] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:58:01] GET /admin/spotify/album/5/change/ from 127.0.0.1
-[2025-08-26 10:58:01] Response status: 200 for GET /admin/spotify/album/5/change/
-[2025-08-26 10:58:01] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:58:01] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:58:04] POST /admin/spotify/album/5/change/ from 127.0.0.1
-[2025-08-26 10:58:04] Response status: 302 for POST /admin/spotify/album/5/change/
-[2025-08-26 10:58:05] GET /admin/spotify/album/ from 127.0.0.1
-[2025-08-26 10:58:05] Response status: 200 for GET /admin/spotify/album/
-[2025-08-26 10:58:05] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:58:05] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:58:07] GET /admin/spotify/album/4/change/ from 127.0.0.1
-[2025-08-26 10:58:07] Response status: 200 for GET /admin/spotify/album/4/change/
-[2025-08-26 10:58:07] GET /admin/jsi18n/ from 127.0.0.1
-[2025-08-26 10:58:07] Response status: 200 for GET /admin/jsi18n/
-[2025-08-26 10:58:17] GET / from 127.0.0.1
-[2025-08-26 10:58:17] Response status: 200 for GET /
-[2025-08-26 10:58:17] GET /media/songs/petrol.jpg from 127.0.0.1
-[2025-08-26 10:58:17] GET /media/songs/ki_sm.jpg from 127.0.0.1
-[2025-08-26 10:58:17] GET /media/songs/hashar.jpg from 127.0.0.1
-[2025-08-26 10:58:17] Response status: 304 for GET /media/songs/petrol.jpg
-[2025-08-26 10:58:17] GET /media/artists/babbu_maan.jpg from 127.0.0.1
-[2025-08-26 10:58:17] Response status: 304 for GET /media/songs/ki_sm.jpg
-[2025-08-26 10:58:17] GET /media/artists/Amrinder_gill.jpg from 127.0.0.1
-[2025-08-26 10:58:17] Response status: 304 for GET /media/songs/hashar.jpg
-[2025-08-26 10:58:17] GET /media/artists/miss_pooja.jpg from 127.0.0.1
-[2025-08-26 10:58:17] Response status: 304 for GET /media/artists/babbu_maan.jpg
-[2025-08-26 10:58:17] Response status: 304 for GET /media/artists/Amrinder_gill.jpg
-[2025-08-26 10:58:17] Response status: 304 for GET /media/artists/miss_pooja.jpg
-[2025-08-26 10:58:17] GET /media/albums/am_album.jpeg from 127.0.0.1
-[2025-08-26 10:58:17] GET /media/albums/kanth_klr_alb.jpeg from 127.0.0.1
-[2025-08-26 10:58:17] GET /media/albums/yo_yo_alb.jpeg from 127.0.0.1
-[2025-08-26 10:58:17] GET /media/albums/oye_hoye_harbhn_alb.jpeg from 127.0.0.1
-[2025-08-26 10:58:17] GET /media/albums/piyaas_album.jpg from 127.0.0.1
-[2025-08-26 10:58:17] Response status: 304 for GET /media/albums/am_album.jpeg
-[2025-08-26 10:58:17] Response status: 304 for GET /media/albums/kanth_klr_alb.jpeg
-[2025-08-26 10:58:17] Response status: 304 for GET /media/albums/yo_yo_alb.jpeg
-[2025-08-26 10:58:17] Response status: 304 for GET /media/albums/piyaas_album.jpg
-[2025-08-26 10:58:17] Response status: 304 for GET /media/albums/oye_hoye_harbhn_alb.jpeg
-[2025-08-26 10:58:23] GET /media/songs/Hashar_-_Babbu_Maan_p7afF6T_77C5kwP.mp3 from 127.0.0.1
-[2025-08-26 10:58:23] Response status: 304 for GET /media/songs/Hashar_-_Babbu_Maan_p7afF6T_77C5kwP.mp3
-[2025-08-26 10:58:23] GET /favicon.ico from 127.0.0.1
-[2025-08-26 10:58:23] Response status: 404 for GET /favicon.ico
-[2025-08-26 10:58:24] GET /artist/2/ from 127.0.0.1
-[2025-08-26 10:58:24] GET /null from 127.0.0.1
-[2025-08-26 10:58:24] Response status: 404 for GET /null
-[2025-08-26 10:58:24] Response status: 200 for GET /artist/2/
-[2025-08-26 11:07:36] GET /media/songs/Ki_Samjhaiye_-_Amrinder_Gill_22qLDu6.mp3 from 127.0.0.1
-[2025-08-26 11:07:36] Response status: 304 for GET /media/songs/Ki_Samjhaiye_-_Amrinder_Gill_22qLDu6.mp3
-[2025-08-26 11:07:37] GET /favicon.ico from 127.0.0.1
-[2025-08-26 11:08:01] GET /media/songs/Petrol_-_Miss_Pooja_SSL5nt1_Bwmb8D1.mp3 from 127.0.0.1
-[2025-08-26 11:08:01] Response status: 200 for GET /media/songs/Petrol_-_Miss_Pooja_SSL5nt1_Bwmb8D1.mp3
+[2025-08-26 11:11:21] GET / from 127.0.0.1
+[2025-08-26 11:11:21] Response status: 200 for GET /
+[2025-08-26 11:11:25] GET /favicon.ico from 127.0.0.1
+[2025-08-26 11:11:25] Response status: 404 for GET /favicon.ico
+[2025-08-26 11:11:33] GET /artist/1/ from 127.0.0.1
+[2025-08-26 11:11:33] GET /null from 127.0.0.1
+[2025-08-26 11:11:33] Response status: 404 for GET /null
+[2025-08-26 11:11:33] Response status: 200 for GET /artist/1/
+[2025-08-26 11:11:45] GET /artist/2/ from 127.0.0.1
+[2025-08-26 11:11:45] GET /null from 127.0.0.1
+[2025-08-26 11:11:45] Response status: 404 for GET /null
+[2025-08-26 11:11:45] Response status: 200 for GET /artist/2/
+[2025-08-26 11:11:48] GET /artist/3/ from 127.0.0.1
+[2025-08-26 11:11:48] Response status: 200 for GET /artist/3/
+[2025-08-26 11:11:48] GET /null from 127.0.0.1
+[2025-08-26 11:11:48] Response status: 404 for GET /null
+[2025-08-26 11:11:57] GET /album/1/ from 127.0.0.1
+[2025-08-26 11:11:57] Response status: 200 for GET /album/1/
+[2025-08-26 11:12:09] GET /artist/3/ from 127.0.0.1
+[2025-08-26 11:12:09] Response status: 200 for GET /artist/3/
+[2025-08-26 11:12:09] GET /null from 127.0.0.1
+[2025-08-26 11:12:09] Response status: 404 for GET /null
+[2025-08-26 11:22:42] GET / from 127.0.0.1
+[2025-08-26 11:22:42] Response status: 200 for GET /
+[2025-08-26 11:22:44] GET /favicon.ico from 127.0.0.1
+[2025-08-26 11:22:44] Response status: 404 for GET /favicon.ico
+[2025-08-26 11:22:45] GET /artist/1/ from 127.0.0.1
+[2025-08-26 11:22:45] GET /null from 127.0.0.1
+[2025-08-26 11:22:45] Response status: 404 for GET /null
+[2025-08-26 11:22:45] Response status: 200 for GET /artist/1/
+[2025-08-26 11:23:53] GET /favicon.ico from 127.0.0.1
+[2025-08-26 11:23:53] Response status: 404 for GET /favicon.ico
+[2025-08-26 11:23:58] GET /null from 127.0.0.1
+[2025-08-26 11:23:58] Response status: 404 for GET /null
+[2025-08-26 11:27:13] GET / from 127.0.0.1
+[2025-08-26 11:27:13] Response status: 200 for GET /
+[2025-08-26 11:27:16] GET /favicon.ico from 127.0.0.1
+[2025-08-26 11:27:16] Response status: 404 for GET /favicon.ico
+[2025-08-26 11:27:22] GET /null from 127.0.0.1
+[2025-08-26 11:27:22] Response status: 404 for GET /null
+[2025-08-26 11:27:43] GET /album/2/ from 127.0.0.1
+[2025-08-26 11:27:43] Response status: 200 for GET /album/2/
+[2025-08-26 11:27:53] GET /album/4/ from 127.0.0.1
+[2025-08-26 11:27:53] Response status: 200 for GET /album/4/
