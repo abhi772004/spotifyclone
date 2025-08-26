@@ -146,7 +146,7 @@
     <img src="{{ album.coverimage.url }}" alt="{{ album.title }}" class="album-img">
     <div class="album-name">{{ album.title }}</div>
     <div class="album-meta">
-      By {{ album.artist.name }} • Released: {{ album.release_date }}
+      By {% for artists in album.artist.all %}{{ artists.name }}{% if not forloop.last %}, {% endif %}{% endfor %} • Released: {{ album.release_date }}
     </div>
     <a href="{% url 'spotify:home' %}" class="back-btn"
        onclick="if (history.length > 1) { history.back(); return false; }">← Back</a>

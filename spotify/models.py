@@ -17,7 +17,7 @@ class Song(models.Model):
     audio=models.FileField(upload_to='songs/',null=True, blank=True)
     album=models.ForeignKey('Album', on_delete=models.CASCADE, null=True, blank=True)   
     def __str__(self):
-      return self.title
+     return self.title
     
 class Album(models.Model):
    coverimage=models.ImageField(upload_to='albums/',null=True, blank=True)    
