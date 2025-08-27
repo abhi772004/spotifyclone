@@ -51,3 +51,20 @@ class albumview(DetailView):
         context["songs"] = Song.objects.filter(album=album)
         print("⚡ Fetching songs for album from DB...")  # Debug log
         return context
+
+from rest_framework import viewsets    
+from .models import Song,Album, Artist
+
+from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer
+
+class songViewSet(viewsets.ModelViewSet):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
+class albumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+
+class artistViewSet(viewsets.ModelViewSet):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer

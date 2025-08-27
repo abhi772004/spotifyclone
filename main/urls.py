@@ -17,9 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+from rest_framework import routers  
+from spotify.views import albumViewSet, artistViewSet, songViewSet
+
+router = routers.DefaultRouter()
+router.register(r'ganne', songViewSet)
+router.register(r'albums', albumViewSet)
+router.register(r'kalakar', artistViewSet)
 
 urlpatterns = [
      path('admin/', admin.site.urls),
     path('', include('spotify.urls',namespace='spotify')),
+    path('api/', include(router.urls)),
 ]
+
 
