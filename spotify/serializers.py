@@ -6,6 +6,7 @@ class SongSerializer(serializers.ModelSerializer):
         model = Song
         fields = '__all__'
 
+
 class AlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
