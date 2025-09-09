@@ -56,15 +56,18 @@ from rest_framework import viewsets
 from .models import Song,Album, Artist
 
 from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 class songViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class albumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class artistViewSet(viewsets.ModelViewSet):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

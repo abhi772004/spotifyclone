@@ -30,6 +30,7 @@ urlpatterns = [
     path('', include('spotify.urls',namespace='spotify')),
     path('api/', include(router.urls)),
     path('api/accounts/', include('accounts.urls')),
+   
 ]
 
 
